@@ -1,4 +1,4 @@
-import { Node,Mesh,Vec3,material,sphereGeometry,cylinderGeometry,CatmullRomCurve,tubeGeometry,alignY,parametric } from './webgl.js';
+import { Node,Mesh,Vec3,material,sphereGeometry,cylinderGeometry,CatmullRomCurve,tubeGeometry,alignY,parametric } from '../core/webgl.js';
 
 export const black=material({color:0x171212,roughness:.65});
 const brown=material({color:0x49251c});

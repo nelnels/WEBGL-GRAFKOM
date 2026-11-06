@@ -1,4 +1,4 @@
-import {Node,Mesh,material,Vec3,parametric,torusGeometry} from './webgl.js';
+import {Node,Mesh,material,Vec3,parametric,torusGeometry} from '../core/webgl.js';
 
 // Hierarki: root -> badan -> kepala -> telinga, serta badan -> lengan/kaki.
 // Primitive dibuat secara prosedural; tidak ada model GLB yang dimuat.

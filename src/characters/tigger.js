@@ -1,4 +1,4 @@
-import {Node,Mesh,material,Vec3,parametric,CatmullRomCurve,tubeGeometry} from './webgl.js';
+import {Node,Mesh,material,Vec3,parametric,CatmullRomCurve,tubeGeometry} from '../core/webgl.js';
 
 export function createTigger({ egg, armSegment, line, black }) {
   const orange=material({color:0xf18c24,roughness:.76});

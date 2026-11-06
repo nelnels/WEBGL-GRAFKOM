@@ -1,4 +1,4 @@
-import {Vec3,perspective,lookAt,multiply} from './webgl.js';
+import {Vec3,perspective,lookAt,multiply} from '../core/webgl.js';
 export function createCamera(canvas,view){
   const state={yaw:0,pitch:.10,zoom:1},goal={...state};let pointer=null;
   canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;pointer={id:e.pointerId,x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);canvas.style.cursor='grabbing';});

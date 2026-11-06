@@ -1,5 +1,5 @@
-import {Node,Mesh,material,diskGeometry,sphereGeometry} from './webgl.js';
-import {egg,tube} from './primitives.js';
+import {Node,Mesh,material,diskGeometry,sphereGeometry} from '../core/webgl.js';
+import {egg,tube} from '../geometry/primitives.js';
 export function createEnvironment(){
   const root=new Node('Environment');
   const grass=material({color:0x73af50}),bark=material({color:0x80502d}),leaf=material({color:0x4d973f}),light=material({color:0x81bb55});

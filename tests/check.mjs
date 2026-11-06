@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {Node,Vec3,rotationAxis,multiply,translation,scaling,transformPoint,normalMatrix,identity} from './webgl.js';
-import * as primitives from './primitives.js';
-import {createPooh} from './pooh.js';
-import {createPiglet} from './piglet.js';
-import {createTigger} from './tigger.js';
-import {createCharacterTransforms,createDemoControls,ARBITRARY_AXIS} from './character-transforms.js';
+import {Node,Vec3,rotationAxis,multiply,translation,scaling,transformPoint,normalMatrix,identity} from '../src/core/webgl.js';
+import * as primitives from '../src/geometry/primitives.js';
+import {createPooh} from '../src/characters/pooh.js';
+import {createPiglet} from '../src/characters/piglet.js';
+import {createTigger} from '../src/characters/tigger.js';
+import {createCharacterTransforms,createDemoControls,ARBITRARY_AXIS} from '../src/animation/character-transforms.js';
 
 const near=(a,b)=>assert(Math.abs(a-b)<1e-5,`${a} != ${b}`);
 const rotated=transformPoint(rotationAxis(new Vec3(0,0,1),Math.PI/2),new Vec3(1,0,0));
@@ -62,7 +62,7 @@ for(const [key,mode]of Object.entries({KeyT:'translate',KeyR:'rotate',KeyS:'scal
 }
 press('Space');assert(controls.state.paused);press('Space');assert(!controls.state.paused);press('KeyA');press('Escape');assert.equal(controls.state.mode,null);controls.dispose();
 for(const page of ['index.html','pooh.html','piglet.html','tigger.html']){
-  const html=fs.readFileSync(new URL(page,import.meta.url),'utf8');
+  const html=fs.readFileSync(new URL('../'+page,import.meta.url),'utf8');
   assert((html.match(/<canvas/g)||[]).length===1);assert(!html.includes('importmap'));
 }
 console.log('Native matrix math, hierarchical matrices, geometry equations, 15 demos, page navigation, and pause/reset controls passed.');

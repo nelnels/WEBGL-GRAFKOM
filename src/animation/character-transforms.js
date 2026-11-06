@@ -1,4 +1,4 @@
-import {Vec3,transformPoint} from './webgl.js';
+import {Vec3,transformPoint} from '../core/webgl.js';
 
 export const ARBITRARY_AXIS=new Vec3(1,1,.5).normalize();
 export const DEMO_MODES=['translate','rotate','scale','axis','hierarchy'];

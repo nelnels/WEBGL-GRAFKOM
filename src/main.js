@@ -1,8 +1,8 @@
-import {Node,Renderer} from './webgl.js';
-import * as primitives from './primitives.js';
-import {createEnvironment} from './environment.js';
-import {createCamera} from './camera.js';
-import {createCharacterTransforms,createDemoControls} from './character-transforms.js';
+import {Node,Renderer} from './core/webgl.js';
+import * as primitives from './geometry/primitives.js';
+import {createEnvironment} from './scene/environment.js';
+import {createCamera} from './scene/camera.js';
+import {createCharacterTransforms,createDemoControls} from './animation/character-transforms.js';
 
 async function start(){
   const canvas=document.querySelector('#scene');
@@ -14,7 +14,7 @@ async function start(){
   };
   const selected=choices[id];if(!selected)throw new Error('Karakter tidak dikenal.');
   // Hanya satu model dibangun dan dirender pada setiap halaman.
-  const module=await import('./'+selected.file),character=module[selected.factory](primitives);
+  const module=await import('./characters/'+selected.file),character=module[selected.factory](primitives);
   character.root.position.set(...selected.position);
   const scene=new Node('Scene');scene.add(createEnvironment());scene.add(character.root);
   const renderer=new Renderer(canvas),camera=createCamera(canvas,character.view);
