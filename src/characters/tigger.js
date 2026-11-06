@@ -154,6 +154,7 @@ export function createTigger({ egg, armSegment, line, black }) {
   return {
     root,
     body,
+    parts:{head,arms},
     view: {target:[-.35,.5,0],height:6.2,halfWidth:3.5},
     update(t) {
       const phase=t*2.3,lift=Math.max(0,Math.sin(phase)),swing=Math.sin(phase+.4);

@@ -27,8 +27,11 @@ export function createPooh(){
     armSegment(group,shoulder,[side*1.72,.91,.06],.39,red);egg(group,shoulder,[.40,.39,.37],red);
     const paw=egg(group,[side*2.12,-.30,.25],[.36,.29,.37],yellow);paw.rotation.z=-side*.3;
     egg(group,[side*1.92,-.23,.48],[.17,.20,.17],yellow);
+    group.position.set(...shoulder);
+    for(const child of group.children)child.position.sub(group.position);
+    return group;
   }
-  arm(-1);arm(1);
+  const arms=[arm(-1),arm(1)];
   // Proporsi kaki yang sudah disetujui tetap sama.
   for(const side of [-1,1]){
     const leg=new Node(`Pooh-leg-${side}`);leg.position.set(side*1.30,-1.59,.35);leg.rotation.y=side*.22;body.add(leg);
@@ -36,5 +39,5 @@ export function createPooh(){
     egg(leg,[side*.29,-.08,.48],[.57,.48,.74],yellow);
     egg(leg,[side*.39,-.03,.91],[.58,.63,.50],yellow).rotation.x=-.12;
   }
-  return {root,body,view:{target:[0,1.5,0],height:10,halfWidth:3.8},update(t){body.rotation.z=Math.sin(t*1.3)*.018;head.rotation.y=Math.sin(t*.8)*.10;}};
+  return {root,body,parts:{head,arms},view:{target:[0,1.5,0],height:10,halfWidth:3.8},update(t){body.rotation.z=Math.sin(t*1.3)*.018;head.rotation.y=Math.sin(t*.8)*.10;}};
 }

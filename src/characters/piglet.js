@@ -66,6 +66,7 @@ export function createPiglet({ egg, armSegment, line, black }) {
   return {
     root,
     body,
+    parts:{head,arms,legs},
     view: {target:[0,.9,0],height:7.4,halfWidth:2.8},
     update(t) {
       const walk=Math.sin(t*2.5);

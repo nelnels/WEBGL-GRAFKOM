@@ -6,6 +6,10 @@ import {createCharacterTransforms,createDemoControls} from './animation/characte
 
 async function start(){
   const canvas=document.querySelector('#scene');
+  if(document.body.dataset.character==='story'){
+    const {startStory}=await import('./story-player.js');
+    startStory(canvas);return;
+  }
   const id=document.body.dataset.character||'pooh';
   const choices={
     pooh:{file:'pooh.js',factory:'createPooh',position:[0,0,0]},

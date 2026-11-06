@@ -198,7 +198,8 @@ void main(){
  float rim=pow(1.0-max(dot(n,view),0.0),3.0)*.09;
  vec3 color=tone(uColor*(.45+.15*n.y+1.22*diffuse*visibility+rim)+vec3(gloss*visibility));
  color=pow(color,vec3(1.0/2.2));
- float fog=smoothstep(22.0,55.0,distance(uCamera,vPosition));
+ // Keep the foreground clear when a narrow viewport moves the camera back.
+ float fog=smoothstep(22.0,55.0,distance(uCamera,vPosition)-length(uCamera)+16.0);
  gl_FragColor=vec4(mix(color,vec3(.733,.906,.890),fog),1.0);
 }`;
 const depthVertex=`attribute vec3 aPosition;uniform mat4 uMVP;void main(){gl_Position=uMVP*vec4(aPosition,1.0);}`;

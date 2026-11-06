@@ -1,4 +1,4 @@
-# Rubrik: WebGL murni dan karakter terpisah
+# Rubrik: WebGL murni dan cerita bersama
 
 Seluruh rendering 3D menggunakan WebGL 1.0 langsung. Tidak ada Three.js,
 library matriks, CDN, model GLB, atau renderer eksternal. HTML/CSS menyediakan
@@ -10,7 +10,7 @@ kanvas; JavaScript menghitung geometri dan transformasi; GLSL merendernya di GPU
 2. Klik kanan `pooh.html`, lalu **Open with Live Server**.
 3. Untuk Piglet, buka `piglet.html` dengan cara yang sama.
 4. Untuk Tigger, buka `tigger.html` dengan cara yang sama.
-5. `index.html` juga menampilkan Pooh saja sebagai halaman awal.
+5. `index.html` menampilkan cerita 60 detik dengan ketiga karakter dalam satu environment.
 
 Contoh URL bila Live Server berjalan di port 5500:
 
@@ -23,8 +23,7 @@ double-click/file:// karena ES module perlu dilayani lewat HTTP.
 Alternatif terminal dari folder proyek: `python3 -m http.server 8000`, lalu
 buka `http://localhost:8000/pooh.html` dan halaman lainnya.
 
-Setiap halaman hanya mengimpor builder karakter pilihannya dan membangun satu model.
-Tidak ada tiga karakter yang disembunyikan dalam satu scene.
+Halaman demo karakter membangun satu model. Halaman utama membangun Pooh, Piglet, dan Tigger dalam satu scene bersama environment yang sama.
 
 ## Kontrol
 
@@ -91,3 +90,23 @@ Cylinder memakai radius atas sama dengan radius bawah.
 
 Environment dan transisi halus sudah diimplementasikan; nilai estetika tetap
 berdasarkan penilaian dosen.
+
+## Bukti rubrik dalam cerita utama
+
+Cerita: **Petualangan Layang-Layang**, durasi 60 detik. Piglet kehilangan kendali layang-layang, mencoba meraih tetapi gagal, lalu dibantu Pooh dan Tigger. Klimaks terjadi ketika tangan Tigger benar-benar mencapai layang-layang di cabang. Akhir memperlihatkan layang-layang kembali terbang.
+
+| Kriteria | Adegan / implementasi |
+| --- | --- |
+| Tiga karakter, satu environment | `index.html`: Pooh, Piglet, dan Tigger dalam satu hutan; rumah, jembatan, dan pohon terhubung oleh jalur cerita |
+| Translate | Piglet mengejar layang-layang (8-15); Tigger melewati jembatan (25-30); lompatan penyelamatan (38.5-44.5) |
+| Rotate | Badan menghadap arah perjalanan; kepala menoleh dan mendongak; tangan menunjuk/melambai |
+| Scaling | Tigger melakukan squash saat bersiap dan stretch ketika melesat (36-42.5) |
+| Arbitrary axis | Badan Tigger miring terhadap sumbu ternormalisasi (1, 1, 0.5) selama lompatan (38.5-44.5) |
+| Hierarchy | Gerakan dari pivot bahu; kepala, tangan, kaki mengikuti badan; lutut dan ekor Tigger bergerak |
+| 3D curve pada karakter | Lengan Pooh, detail wajah Piglet, ekor/detail wajah Tigger |
+| Ellipsoid / cylinder / quadric lain | Geometri karakter dipertahankan; moncong Pooh, telinga Piglet, telapak Tigger berupa paraboloid |
+| Environment / kelancaran | Hutan berlapis, rumah, sungai, jembatan, jalan, bunga, kupu-kupu; transisi halus, kamera mengikuti adegan |
+
+Implementasi cerita ada di `src/animation/story.js`; properti dan tali di `src/scene/story-props.js`. Timeline memakai waktu absolut agar seek dan replay menghasilkan pose yang sama. Tangan Tigger bertemu layang-layang di detik 41; tali mengikuti posisi tangan Piglet dan mengendur saat persiapan.
+
+U menyembunyikan kontrol untuk rekaman, sementara judul dan subtitle tetap tampil. Dialog berupa teks, belum ada audio. Rekaman video 1 menit, unggahan YouTube, minimal dua gambar per karakter, dan dokumen pengumpulan tetap perlu disiapkan. Estetika dan kemiripan tetap dinilai dosen.

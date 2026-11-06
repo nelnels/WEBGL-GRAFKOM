@@ -15,8 +15,9 @@ export function createCamera(canvas,view){
     const aspect=canvas.width/canvas.height,fov=36*Math.PI/180;
     const distance=Math.max(view.height/2,view.halfWidth/aspect)/Math.tan(fov/2)*state.zoom;
     const target=new Vec3(...view.target);
-    camera.eye.set(target.x+distance*Math.sin(state.yaw)*Math.cos(state.pitch),target.y+distance*Math.sin(state.pitch),target.z+distance*Math.cos(state.yaw)*Math.cos(state.pitch));
-    camera.viewProjection=multiply(perspective(fov,aspect,.1,100),lookAt(camera.eye,target));
+    const yaw=state.yaw+(view.yaw||0),pitch=state.pitch+(view.pitch||0);
+    camera.eye.set(target.x+distance*Math.sin(yaw)*Math.cos(pitch),target.y+distance*Math.sin(pitch),target.z+distance*Math.cos(yaw)*Math.cos(pitch));
+    camera.viewProjection=multiply(perspective(fov,aspect,.1,Math.max(100,distance+80)),lookAt(camera.eye,target));
   }};
   return camera;
 }

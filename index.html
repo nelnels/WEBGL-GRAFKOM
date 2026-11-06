@@ -1,3 +1,26 @@
-<!doctype html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Winnie the Pooh — WebGL</title><link rel="stylesheet" href="styles/style.css"></head>
-<body data-character="pooh"><canvas id="scene" aria-label="Winnie the Pooh 3D"></canvas><script type="module" src="src/main.js"></script></body></html>
+﻿<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Petualangan Layang-Layang — Hundred Acre Wood</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body data-character="story">
+  <canvas id="scene" aria-label="Petualangan layang-layang: Pooh, Piglet, dan Tigger di Hundred Acre Wood"></canvas>
+  <header id="story-heading">
+    <p class="eyebrow">A LITTLE ADVENTURE IN THE HUNDRED ACRE WOOD</p>
+    <h1 id="chapter-title">Sepotong angin, sebuah petualangan</h1>
+    <span class="film-label">THE KITE RESCUE · 60 SECONDS</span>
+  </header>
+  <p id="story-caption" role="status">Piglet: "Lihat, Pooh! Layang-layangku terbang tinggi!"</p>
+  <section id="story-controls" aria-label="Kontrol cerita">
+    <div class="timeline"><label for="story-time">Adegan</label><input id="story-time" type="range" min="0" max="60" step="0.1" value="0"><output id="story-clock" for="story-time">00 / 60 dtk</output></div>
+    <div class="story-actions"><button id="play-story" type="button">Jeda</button><button id="replay-story" type="button">Ulangi</button><button id="hide-controls" type="button">Sembunyikan (U)</button></div>
+    <nav aria-label="Demo per karakter"><a href="pooh.html">Pooh</a><a href="piglet.html">Piglet</a><a href="tigger.html">Tigger</a></nav>
+    <p class="hint">Space: jeda · R: ulangi · U: kontrol<br>Drag: kamera · Scroll: zoom</p>
+  </section>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
