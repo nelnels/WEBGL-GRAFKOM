@@ -1,4 +1,4 @@
-﻿import {Node,Mesh,material,diskGeometry,sphereGeometry,cylinderGeometry,parametric} from '../core/webgl.js';
+import {Node,Mesh,material,diskGeometry,sphereGeometry,cylinderGeometry,parametric} from '../core/webgl.js';
 import {line,armSegment} from '../geometry/primitives.js';
 import {block} from './story-props.js';
 
@@ -46,6 +46,10 @@ export function createEnvironment(){
     for(let k=0;k<7;k++){
       const a=k*2.4,r=k===6?.2:1.3;
       const crown=ell(group,[Math.cos(a)*r,4.9+Math.sin(k*1.3)*.6,Math.sin(a)*r*.7],[1.35,1.15,1.05],foliage[(index+k)%4]);crown.geometry=canopy;crown.receiveShadow=false;
+      if(hero&&k===1){
+        crown.name='Rescue-oak-crown-clearance';
+        crown.position.z-=1.25;crown.scale.z*=.8;
+      }
     }
     if(!hero)swaying.push(group);
     if(hero){

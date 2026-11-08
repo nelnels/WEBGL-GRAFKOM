@@ -4,7 +4,7 @@ import {Node,Vec3,rotationAxis,multiply,translation,scaling,transformPoint,norma
 import * as primitives from '../src/geometry/primitives.js';
 import {createPooh} from '../src/characters/pooh.js';
 import {createPiglet} from '../src/characters/piglet.js';
-import {createTigger} from '../src/characters/tigger.js';
+import {createTigger} from '../src/characters/tigger/index.js';
 import {createCharacterTransforms,createDemoControls,ARBITRARY_AXIS} from '../src/animation/character-transforms.js';
 
 const near=(a,b)=>assert(Math.abs(a-b)<1e-5,`${a} != ${b}`);
@@ -32,7 +32,10 @@ for(const [id,build,position]of [['Pooh',createPooh,[0,0,0]],['Piglet',createPig
     if(g.type==='cylinder'){cylinders++;assert(g.parameters.radiusTop===g.parameters.radiusBottom);}
     if(o.name.includes('paraboloid')){
       quadrics++;
-      const [a,b,d,cy]=id==='Pooh'?[.76,.49,.43,0]:id==='Piglet'?[.32,.76,.18,.76]:[.19,.25,.12,0];
+      assert.equal(g.type,'elliptic-paraboloid');
+      assert(g.parameters,'paraboloid must carry equation parameters');
+      const {a,b,depth:d,cy}=g.parameters;
+      assert([a,b,d,cy].every(Number.isFinite)&&a>0&&b>0);
       for(let i=0;i<g.positions.length;i+=3){const [x,y,z]=g.positions.slice(i,i+3);near(z,d*(1-(x/a)**2-((y-cy)/b)**2));}
     }
     for(const group of g.groups)assert(group.start+group.count<=g.indices.length);
@@ -42,9 +45,18 @@ for(const [id,build,position]of [['Pooh',createPooh,[0,0,0]],['Piglet',createPig
   for(const mode of [null,'translate','rotate','scale','axis','hierarchy']){
     character.root.position.set(...position);character.root.scale.setScalar(1);character.root.rotation.set(0,0,0);character.root.axisAngle=0;
     const motion=createCharacterTransforms(character),samples=[];
+    assert(motion.groundSamples.reduce((n,s)=>n+s.points.length/3,0)<=3000,'ground sampling budget');
     for(let frame=0;frame<180;frame++){
       const t=frame/60;character.update(t);motion.update(t,1/60,mode,t);character.root.updateWorld();
       character.root.traverse(o=>assert([...o.world].every(Number.isFinite)));
+      if((mode==='axis'||mode==='hierarchy')&&frame%12===0){
+        let lowest=Infinity;
+        character.root.traverse(mesh=>{
+          if(!mesh.geometry)return;const p=mesh.geometry.positions,m=mesh.world;
+          for(let j=0;j<p.length;j+=3)lowest=Math.min(lowest,m[1]*p[j]+m[5]*p[j+1]+m[9]*p[j+2]+m[13]);
+        });
+        assert(lowest>=-2.27,'sampled grounding must keep actual vertices above ground');
+      }
       samples.push([character.root.position.y,character.root.scale.x,character.root.rotation.y,character.root.axisAngle,character.body.rotation.z]);
     }
     const col={translate:0,scale:1,rotate:2,axis:3,hierarchy:4}[mode];

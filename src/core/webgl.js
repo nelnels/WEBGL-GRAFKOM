@@ -130,14 +130,6 @@ export function diskGeometry(radius=1,segments=64){
   for(let i=0;i<segments;i++)idx.push(0,i+1,i+2);
   return geometry(p,n,idx,'disk');
 }
-export function latheGeometry(points,segments=64){
-  const count=points.length;
-  return parametric((u,v,p)=>{
-    const f=v*(count-1),i=Math.min(count-2,Math.floor(f)),t=f-i;
-    const radius=points[i].x*(1-t)+points[i+1].x*t,y=points[i].y*(1-t)+points[i+1].y*t,a=u*Math.PI*2;
-    p.set(radius*Math.sin(a),y,radius*Math.cos(a));
-  },segments,(count-1)*3);
-}
 // Interpolasi Catmull-Rom 3D dihitung sendiri, lalu diekstrusi menjadi tube.
 export class CatmullRomCurve {
   constructor(points){this.points=points.map(p=>p.clone());}

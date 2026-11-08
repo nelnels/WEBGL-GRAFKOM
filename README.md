@@ -26,15 +26,29 @@ dengan WebGL dan server HTTP lokal.
 WEBGL-GRAFKOM/
 |-- index.html, pooh.html, piglet.html, tigger.html
 |-- src/
-|   |-- main.js                  # Titik masuk dan loop rendering
-|   |-- core/webgl.js            # Class OOP, matematika, geometri dasar, renderer
-|   |-- geometry/primitives.js   # Helper bentuk penyusun karakter
-|   |-- characters/              # Model dan animasi Pooh, Piglet, Tigger
-|   |-- scene/                   # Kamera dan lingkungan
-|   `-- animation/               # Demo transformasi dan kontrol keyboard
+|   |-- main.js                       # Titik masuk dan pemuatan karakter
+|   |-- story-player.js               # Playback cerita dan loop rendering
+|   |-- tigger-presentation.js        # Panel sorot berdasarkan mesh nyata
+|   |-- core/webgl.js                 # Matriks, Node/Mesh, geometri, renderer
+|   |-- geometry/
+|   |   |-- primitives.js             # Helper geometri dasar
+|   |   `-- quadrics.js               # Pembungkus primitive bernama
+|   |-- characters/
+|   |   |-- pooh.js
+|   |   |-- piglet.js
+|   |   `-- tigger/
+|   |       |-- index.js              # createTigger, perakitan dan update(t)
+|   |       |-- materials.js          # Warna
+|   |       |-- torso.js              # Loft badan/perut; leher dan dada
+|   |       |-- head.js               # Kepala dan wajah
+|   |       |-- ears.js               # Paraboloid telinga
+|   |       |-- limbs.js              # Lengan dan kaki
+|   |       `-- tail.js               # Ekor kurva 3D
+|   |-- scene/                        # Kamera, lingkungan, properti cerita
+|   `-- animation/                    # story.js dan character-transforms.js
 |-- styles/style.css
-|-- tests/check.mjs
-`-- docs/RUBRIK.md
+|-- tests/                            # check.mjs, story-check.mjs, environment-check.mjs
+`-- docs/                             # RUBRIK.md dan TIGGER.md
 ```
 
 ## Alur kode
@@ -44,6 +58,29 @@ WEBGL-GRAFKOM/
 3. Builder menyusun karakter memakai `geometry/primitives.js` dan class `Node`/`Mesh` dari `core/webgl.js`.
 4. `main.js` menggabungkan karakter dan environment, lalu menyiapkan kamera dan kontrol transformasi.
 5. Setiap frame memperbarui animasi, transformasi, dan kamera, lalu `Renderer` menggambar scene.
+
+## Lokasi item rubrik
+
+Object 1/2/3 di tabel berikut adalah tiga karakter utama. Baris primitive
+menunjukkan lokasi bentuk penyusunnya pada Tigger.
+
+| Item rubrik | File | Fungsi / metode |
+| --- | --- | --- |
+| 3D Curve | `src/characters/tigger/tail.js`; `src/geometry/primitives.js` | `buildTail()`; `line()` |
+| Object 1 — Pooh | `src/characters/pooh.js` | `createPooh()` |
+| Object 2 — Piglet | `src/characters/piglet.js` | `createPiglet()` |
+| Object 3 — Tigger | `src/characters/tigger/index.js` | `createTigger()` |
+| Ellipsoid | `src/geometry/quadrics.js`; `src/characters/tigger/head.js` | `ELLIPSOID()`; `buildHead()` |
+| Elliptic paraboloid | `src/geometry/quadrics.js`; `src/characters/tigger/ears.js` | `ELLIPTIC_PARABOLOID()`; `buildEars()` |
+| Cylinder | `src/geometry/quadrics.js`; `src/characters/tigger/limbs.js` | `CYLINDER()`; `buildLimbs()` |
+| Translate | `src/animation/character-transforms.js` | `createCharacterTransforms()` → `update()`, mode `translate` |
+| Rotate | `src/animation/character-transforms.js` | `createCharacterTransforms()` → `update()`, mode `rotate` |
+| Scaling | `src/animation/character-transforms.js` | `createCharacterTransforms()` → `update()`, mode `scale` |
+| Rotate arbitrary axis | `src/animation/character-transforms.js`; `src/core/webgl.js` | `createCharacterTransforms()` → `update()`, mode `axis`; `rotationAxis()` |
+| Hierarchical | `src/animation/character-transforms.js`; `src/core/webgl.js` | `createCharacterTransforms()` → `update()`, mode `hierarchy`; `Node.updateWorld()` |
+
+Rincian struktur Tigger tersedia di [TIGGER.md](docs/TIGGER.md). Badan dan perut
+Tigger adalah surface loft bebas; panel sorot menampilkan jenis tersebut tersendiri.
 
 ## Petualangan Layang-Layang (60 detik)
 

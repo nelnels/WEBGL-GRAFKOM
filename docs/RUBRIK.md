@@ -63,13 +63,14 @@ Tombol 1/2/3 berpindah halaman, bukan menggabungkan karakter.
 | 3D curve di karakter | Lengkungan kedua lengan | Senyum, alis, lipatan telinga | Ekor, alis, mulut, kumis |
 | Ellipsoid | Kepala, perut, mata, telapak | Kepala, badan, moncong, tangan, telapak | Kepala, leher, paha, moncong, tangan |
 | Cylinder | Lengan baju | Lengan, kaki | Lengan, betis |
-| Quadric lain | Moncong: elliptic paraboloid | Telinga: elliptic paraboloid | Ujung telapak: elliptic paraboloid |
+| Quadric lain | Moncong: elliptic paraboloid | Telinga: elliptic paraboloid | Telinga dan ujung telapak: elliptic paraboloid |
 | Translate/Rotate/Scaling/Arbitrary Axis | Ada, dengan kontrol T/R/S/A | Ada, dengan kontrol T/R/S/A | Ada, dengan kontrol T/R/S/A |
 | Hierarchy | Badan -> kepala/tangan/kaki | Badan -> kepala/lengan/kaki; kepala -> telinga | Badan -> kepala/lengan/kaki/ekor; lengan -> siku; kaki -> lutut |
 
 Quadric lokal: `z = d*(1 - x*x/(a*a) - y*y/(b*b))`.
-Telinga Piglet menggeser pusat y sebesar 0.76. Torso Tigger berbentuk khusus
-bukan quadric; bukti quadric Tigger ada pada ujung telapak belakang.
+Telinga Piglet menggeser pusat y sebesar 0.55. Badan Tigger memakai ellipsoid;
+bukti quadric lain pada Tigger ada di telinga dan penutup telapak belakang.
+Panduan detail dan mode sorot primitive: [TIGGER.md](TIGGER.md).
 Cylinder memakai radius atas sama dengan radius bawah.
 
 ## Kode yang ditunjukkan kepada dosen
@@ -80,9 +81,9 @@ Cylinder memakai radius atas sama dengan radius bawah.
 - `src/core/webgl.js`: `rotationAxis()` menghitung matriks Rodrigues; `Node.updateWorld()`
   menghitung `M_world_child = M_world_parent * M_local_child`.
 - `src/core/webgl.js`: fungsi tessellation sphere/ellipsoid, cylinder, parametric surface,
-  Catmull-Rom curve dan tube, torus, serta lathe gentong.
+  Catmull-Rom curve dan tube, serta torus.
 - `src/geometry/primitives.js`: helper ellipsoid, cylinder, curve, dan elliptic paraboloid.
-- `src/characters/pooh.js`, `src/characters/piglet.js`, `src/characters/tigger.js`: geometri serta hierarchy masing-masing karakter.
+- `src/characters/pooh.js`, `src/characters/piglet.js`, `src/characters/tigger/index.js`: geometri serta hierarchy masing-masing karakter.
 - `src/animation/character-transforms.js`: lima transformasi untuk karakter pada halaman aktif.
 - `src/scene/camera.js`: kamera orbit berbasis event pointer, matriks view dan projection.
 - `src/scene/environment.js`: tanah, pohon, batu, bunga, dan awan.
@@ -101,10 +102,10 @@ Cerita: **Petualangan Layang-Layang**, durasi 60 detik. Piglet kehilangan kendal
 | Translate | Piglet mengejar layang-layang (8-15); Tigger melewati jembatan (25-30); lompatan penyelamatan (38.5-44.5) |
 | Rotate | Badan menghadap arah perjalanan; kepala menoleh dan mendongak; tangan menunjuk/melambai |
 | Scaling | Tigger melakukan squash saat bersiap dan stretch ketika melesat (36-42.5) |
-| Arbitrary axis | Badan Tigger miring terhadap sumbu ternormalisasi (1, 1, 0.5) selama lompatan (38.5-44.5) |
+| Arbitrary axis | Tigger melakukan salto penuh 360° terhadap sumbu ternormalisasi (1, 1, 0.5), detik 41.6-44.3 |
 | Hierarchy | Gerakan dari pivot bahu; kepala, tangan, kaki mengikuti badan; lutut dan ekor Tigger bergerak |
 | 3D curve pada karakter | Lengan Pooh, detail wajah Piglet, ekor/detail wajah Tigger |
-| Ellipsoid / cylinder / quadric lain | Geometri karakter dipertahankan; moncong Pooh, telinga Piglet, telapak Tigger berupa paraboloid |
+| Ellipsoid / cylinder / quadric lain | Geometri karakter dipertahankan; moncong Pooh, telinga Piglet, serta telinga dan penutup telapak Tigger berupa paraboloid |
 | Environment / kelancaran | Hutan berlapis, rumah, sungai, jembatan, jalan, bunga, kupu-kupu; transisi halus, kamera mengikuti adegan |
 
 Implementasi cerita ada di `src/animation/story.js`; properti dan tali di `src/scene/story-props.js`. Timeline memakai waktu absolut agar seek dan replay menghasilkan pose yang sama. Tangan Tigger bertemu layang-layang di detik 41; tali mengikuti posisi tangan Piglet dan mengendur saat persiapan.

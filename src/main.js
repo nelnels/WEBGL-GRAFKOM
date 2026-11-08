@@ -14,12 +14,16 @@ async function start(){
   const choices={
     pooh:{file:'pooh.js',factory:'createPooh',position:[0,0,0]},
     piglet:{file:'piglet.js',factory:'createPiglet',position:[0,-.55,0]},
-    tigger:{file:'tigger.js',factory:'createTigger',position:[.35,.25,0]}
+    tigger:{file:'tigger/index.js',factory:'createTigger',position:[.35,.25,0]}
   };
   const selected=choices[id];if(!selected)throw new Error('Karakter tidak dikenal.');
   // Hanya satu model dibangun dan dirender pada setiap halaman.
   const module=await import('./characters/'+selected.file),character=module[selected.factory](primitives);
   character.root.position.set(...selected.position);
+  if(id==='tigger'){
+    const {setupTiggerPresentation}=await import('./tigger-presentation.js');
+    setupTiggerPresentation(character);
+  }
   const scene=new Node('Scene');scene.add(createEnvironment());scene.add(character.root);
   const renderer=new Renderer(canvas),camera=createCamera(canvas,character.view);
   const motion=createCharacterTransforms({root:character.root,body:character.body});

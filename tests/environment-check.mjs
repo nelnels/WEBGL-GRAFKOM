@@ -1,4 +1,4 @@
-﻿import assert from 'node:assert/strict';
+import assert from 'node:assert/strict';
 import {createEnvironment} from '../src/scene/environment.js';
 const environment=createEnvironment();
 assert(environment.getObjectByName('Woodland-bridge'));

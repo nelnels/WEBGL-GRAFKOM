@@ -20,7 +20,7 @@ export function line(parent,points,radius=.043,mat=brown){
 }
 export function paraboloid(parent,p,a,b,depth,mat,name='elliptic-paraboloid'){
   const g=parametric((r,v,out)=>{const angle=v*Math.PI*2;out.set(a*r*Math.cos(angle),b*r*Math.sin(angle),depth*(1-r*r));},32,48);
-  g.type='elliptic-paraboloid';g.parameters={a,b,depth};
+  g.type='elliptic-paraboloid';g.parameters={a,b,depth,cy:0};
   const mesh=new Mesh(g,mat);mesh.position.set(...p);mesh.name=name;parent.add(mesh);return mesh;
 }
 export {Node,Mesh,Vec3,material};

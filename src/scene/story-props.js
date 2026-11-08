@@ -1,5 +1,5 @@
-﻿import {Node,Mesh,Vec3,material,geometry,cylinderGeometry,alignY} from '../core/webgl.js';
-import {line,egg} from '../geometry/primitives.js';
+import {Node,Mesh,material,geometry,cylinderGeometry,alignY} from '../core/webgl.js';
+import {line} from '../geometry/primitives.js';
 
 // Small reusable solid props; all geometry is generated locally.
 export function block(parent,p,size,mat){
