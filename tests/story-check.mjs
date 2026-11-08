@@ -20,7 +20,7 @@ for(let frame=0;frame<=1800;frame++){
  const tiger=story.characters[2].root;min=Math.min(min,tiger.scale.y);max=Math.max(max,tiger.scale.y);axis=Math.max(axis,Math.abs(tiger.axisAngle));
  if(t>=39&&t<=43)highest=Math.max(highest,tiger.position.y);
 }
-assert(max-min>.08,'crouch and launch must squash/stretch');assert(axis>.1,'leap uses arbitrary axis');assert(highest>1,'rescue jump reaches the branch');
+assert(max-min>.08,'preparation must retain its scaling demonstration');assert(axis>.1,'leap uses arbitrary axis');assert(highest>1,'rescue jump reaches the branch');
 story.update(60);const end=story.characters.map(c=>c.root.position.toArray());story.update(100);assert.deepEqual(story.characters.map(c=>c.root.position.toArray()),end);
 story.update(7);const first=story.kite.position.toArray();story.update(55);story.update(7);assert.deepEqual(story.kite.position.toArray(),first,'scrubbing/replay is deterministic');
 function lowestVertex(character){
@@ -49,6 +49,9 @@ let previousTigerPosition=null;
 for(let frame=0;frame<=500;frame++){
  const t=35+frame*.05;story.update(t);const tiger=story.characters[2].root;
  const lowest=lowestVertex(story.characters[2]);
+ if(t>=39.5&&t<=44.3){
+  assert(Math.abs(tiger.scale.x-tiger.scale.y)<1e-6&&Math.abs(tiger.scale.y-tiger.scale.z)<1e-6,'Tigger must keep normal proportions while fetching the kite');
+ }
  assert(lowest>=-2.27,'Tigger cannot sink below the floor');
  if(t>=45.5)assert(lowest<=-2.20,'Tigger must stay grounded after landing');
  if(previousTigerPosition&&t<=46)assert(tiger.position.distanceTo(previousTigerPosition)<=.25,'Tigger route must not dash between frames');

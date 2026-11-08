@@ -74,8 +74,9 @@ export function createStory(){
       if(i===2){
         c.root.rotation.y=-.15*run;
         c.body.position.y=.22+.20*Math.max(0,Math.sin(t*7))*run;
-        c.root.position.y+=.28*hop(t,26.5,29.5)+.75*hop(t,30,32)+.9*hop(t,33,35)+2.6773*leap+2.0*hop(t,41.6,44.3);
-        const squash=-.35*prepare+.30*pulse(t,39,42.5);
+        c.root.position.y+=.28*hop(t,26.5,29.5)+.75*hop(t,30,32)+.9*hop(t,33,35)+3.5188*leap+2.0*hop(t,41.6,44.3);
+        // Saat meraih, proporsi tetap normal; tinggi dicapai lewat lompatan.
+        const squash=-.35*prepare;
         c.root.scale.set(sizes[i]*(1-squash*.5),sizes[i]*(1+squash),sizes[i]*(1-squash*.5));
         c.root.position.y+=(bases[i]+2.25)*squash;
         c.root.axisAngle=2*Math.PI*blend(t,41.6,44.3);

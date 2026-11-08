@@ -101,7 +101,7 @@ Cerita: **Petualangan Layang-Layang**, durasi 60 detik. Piglet kehilangan kendal
 | Tiga karakter, satu environment | `index.html`: Pooh, Piglet, dan Tigger dalam satu hutan; rumah, jembatan, dan pohon terhubung oleh jalur cerita |
 | Translate | Piglet mengejar layang-layang (8-15); Tigger melewati jembatan (25-30); lompatan penyelamatan (38.5-44.5) |
 | Rotate | Badan menghadap arah perjalanan; kepala menoleh dan mendongak; tangan menunjuk/melambai |
-| Scaling | Tigger melakukan squash saat bersiap dan stretch ketika melesat (36-42.5) |
+| Scaling | Tigger melakukan squash saat bersiap (36-39.5), lalu kembali ke proporsi normal saat meraih layang-layang |
 | Arbitrary axis | Tigger melakukan salto penuh 360° terhadap sumbu ternormalisasi (1, 1, 0.5), detik 41.6-44.3 |
 | Hierarchy | Gerakan dari pivot bahu; kepala, tangan, kaki mengikuti badan; lutut dan ekor Tigger bergerak |
 | 3D curve pada karakter | Lengan Pooh, detail wajah Piglet, ekor/detail wajah Tigger |
