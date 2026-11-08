@@ -5,6 +5,18 @@ import {Vec3,transformPoint} from '../src/core/webgl.js';
 const story=createStory();
 assert.equal(STORY_DURATION,68);
 assert.equal(story.characters.length,3);
+story.update(2.2);
+assert(story.set.getObjectByName('Honey-inside').rotation.z<-.45,'the drinking beat visibly tips the pot toward the mouth');
+// Opening rays to Pooh and the honey must enter through glass, not the solid back wall.
+for(const t of [1,2,3.5]){
+ story.update(t);
+ const v=story.view,aspect=16/9,distance=Math.max(v.height/2,v.halfWidth/aspect)/Math.tan(Math.PI/10);
+ const pitch=.1+v.pitch,eye=new Vec3(v.target[0]+distance*Math.sin(v.yaw)*Math.cos(pitch),v.target[1]+distance*Math.sin(pitch),v.target[2]+distance*Math.cos(v.yaw)*Math.cos(pitch));
+ for(const target of [transformPoint(story.characters[0].parts.head.world,new Vec3()),transformPoint(story.set.getObjectByName('Honey-inside').world,new Vec3(0,.6,0))]){
+  const u=(2.62-eye.z)/(target.z-eye.z),x=eye.x+(target.x-eye.x)*u,y=eye.y+(target.y-eye.y)*u;
+  assert(u>0&&u<1&&x>-6.7&&x<-2.1&&y> -1.6&&y<1.55,'opening must show head and pot through the clear glass panel');
+ }
+}
 assert.equal(story.update(12).phase,'stuck');
 assert.equal(story.update(18).phase,'piglet');
 assert.equal(story.update(35).phase,'pull');

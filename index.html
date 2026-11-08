@@ -9,12 +9,7 @@
 </head>
 <body data-character="story">
   <canvas id="scene" aria-label="Pooh terjepit di pintu; Piglet dan Tigger bekerja sama menolongnya"></canvas>
-  <header id="story-heading">
-    <p class="eyebrow">A LITTLE ADVENTURE IN THE HUNDRED ACRE WOOD</p>
-    <h1 id="chapter-title">Sedikit Terlalu Banyak Madu</h1>
-    <span class="film-label">A 68-SECOND LITTLE ADVENTURE</span>
-  </header>
-  <section id="story-controls" aria-label="Kontrol cerita">
+  <section id="story-controls" class="hidden" aria-label="Kontrol cerita">
     <div class="timeline"><label for="story-time">Adegan</label><input id="story-time" type="range" min="0" max="68" step="0.1" value="0"><output id="story-clock" for="story-time">00 / 68 dtk</output></div>
     <div class="story-actions"><button id="play-story" type="button">Jeda</button><button id="replay-story" type="button">Ulangi</button><button id="hide-controls" type="button">Sembunyikan (U)</button></div>
     <nav aria-label="Demo per karakter"><a href="pooh.html">Pooh</a><a href="piglet.html">Piglet</a><a href="tigger.html">Tigger</a></nav>

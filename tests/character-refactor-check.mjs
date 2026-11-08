@@ -5,7 +5,7 @@ import * as primitives from '../src/geometry/primitives.js';
 import {createPooh} from '../src/characters/pooh/index.js';
 import {createPiglet} from '../src/characters/piglet/index.js';
 
-// Protect the existing model and animation while moving construction into modules.
+// Protect the accepted model and animation; refresh snapshots only for intended model edits.
 const snapshots = {};
 for (const [id, build] of [['pooh', createPooh], ['piglet', createPiglet]]) {
   const character = build(primitives);

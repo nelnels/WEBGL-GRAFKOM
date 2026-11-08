@@ -98,7 +98,7 @@ Pembagian modul Pooh dan Piglet tersedia di [POOH-PIGLET.md](docs/POOH-PIGLET.md
 Buka `index.html` melalui Live Server. Pooh menghabiskan madu lalu terjepit di pintu.
 Piglet mencoba menolong; Tigger ikut membantu. Setelah dua usaha bersama, Pooh
 lepas dan ketiganya jatuh bergantian. Penutupnya, Pooh kembali meraih pot madu.
-Tanpa percakapan, subtitle maupun audio. Judul hanya di pembuka dan penutup.
+Tanpa percakapan, subtitle maupun audio. Halaman cerita langsung menampilkan animasi saja untuk rekaman; judul dihapus dan kontrol disembunyikan saat dibuka.
 
 Adaptasi bebas *Winnie-the-Pooh*, bab 2: Pooh terjepit setelah makan di rumah Rabbit.
 Penolong diganti menjadi Piglet dan Tigger serta kejadiannya dipadatkan untuk film ini.
@@ -121,7 +121,7 @@ matahari, awan, taman bunga, bangku, serta dua pot madu.
 Halaman demo karakter memakai latar kosong. Kamera bergerak dari dalam rumah
 ke sisi luar, kemudian melebar saat ketiganya jatuh.
 
-Space: putar/jeda. R: ulangi. U: sembunyikan kontrol. Slider: pilih waktu 0–68.
+Space: putar/jeda. R: ulangi. U: tampilkan/sembunyikan kontrol. Slider: pilih waktu 0–68.
 Drag/scroll: kamera. Preferensi reduced motion memulai cerita dalam keadaan jeda.
 
 - `src/animation/story.js`: pose, dua usaha menarik, kontak, jatuh dan kamera.

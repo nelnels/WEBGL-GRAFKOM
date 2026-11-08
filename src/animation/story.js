@@ -43,6 +43,8 @@ function lowestPoint(root){
 }
 const point=(node,p=[0,0,0])=>transformPoint(node.world,new Vec3(...p));
 const average=nodes=>nodes.reduce((p,n)=>p.add(point(n)),new Vec3()).multiplyScalar(1/nodes.length);
+// Rotate the pot around a grip on its outer wall, not through the centre of the paw.
+const heldPotPosition=(hand,angle)=>hand.clone().sub(new Vec3(-.3*Math.sin(angle),.3*Math.cos(angle),.46));
 
 export function createStory(){
  // 1. Perakitan set, karakter, pose awal, dan referensi telapak yang dipakai cerita.
@@ -55,7 +57,7 @@ export function createStory(){
  const poohHands=characters[0].parts.arms.map(a=>a.children[3]);
  const pigHands=characters[1].parts.arms.map(a=>a.children.at(-1));
  const tigerHand=root.getObjectByName('Tigger-front-paw-near');
- const view={target:[-1,-.25,0],height:9,halfWidth:7,yaw:-.85,pitch:.02};
+ const view={target:[-4.6,-.25,.3],height:5.8,halfWidth:3.5,yaw:-.35,pitch:.02};
  function pose(t){
   // 2. Reset pose sebelum menerapkan gerakan pada waktu t (seek/replay deterministik).
   const pulling=effort(t),released=blend(t,...STORY_TIMING.release);
@@ -75,15 +77,15 @@ export function createStory(){
     const stuck=pulse(t,10,48),strain=pulling*.15;
     c.root.position.set(mix(-4.6,-2.08,blend(t,5.5,10))+.06*Math.sin(t*4)*pulse(t,10.5,14)+strain+released*2.2,0,0);
     c.body.rotation.x=-.06*pulling;
-    const eat=pulse(t,0,4.5);
-    c.parts.arms[1].rotation.set(-1.5*eat,0,-.55*eat);
-    c.parts.head.rotation.x=.12*eat+.12*stuck;
+    const eat=pulse(t,0,4.5),sip=pulse(t,1.1,3.6);
+    c.parts.arms[1].rotation.set(-1.5*eat-.18*sip,0,-.55*eat);
+    c.parts.head.rotation.x=.12*eat-.14*sip+.12*stuck;
     for(const [j,arm]of c.parts.arms.entries()){
      arm.rotation.x=mix(arm.rotation.x,-1.08,blend(t,11,16)*(1-blend(t,48.8,50)));
      arm.rotation.z+=(j===0?1:-1)*.65*blend(t,11,16)*(1-blend(t,48.8,50));
     }
     c.parts.head.rotation.y=.3*Math.sin(t*2)*pulse(t,10.5,14);
-    c.parts.arms[0].rotation.x-=.8*blend(t,63,66);
+    c.parts.arms[0].rotation.x-=1.2*blend(t,63,66);
     c.parts.head.rotation.x+=.3*blend(t,63,66);
    }
    // 3b. Piglet: mendekat, memegang tangan Pooh, dan menarik dengan badan/kaki.
@@ -153,21 +155,22 @@ export function createStory(){
   root.updateWorld();
   return {pigletGripError:average(poohHands).distanceTo(average(pigHands)),tiggerGripError:target.distanceTo(point(tigerHand))};
  }
- pose(4.5);const putDown=point(poohHands[1]).add(new Vec3(0,-.3,0));
+ pose(4.5);const putDown=heldPotPosition(point(poohHands[1]),0);
  return {root,set,characters,view,update(seconds){
   const t=Math.max(0,Math.min(STORY_DURATION,seconds)),contacts=pose(t);
   // 6. Properti: pot mengikuti tangan saat diangkat dan bangku saat diletakkan.
   const resting=new Vec3(-4.8,-1.6,1.65);
-  if(t<4.5){pot.position.copy(point(poohHands[1])).add(new Vec3(0,-.3,0));pot.rotation.z=-.25*pulse(t,1,4);}
+  if(t<4.5){pot.rotation.z=-.25*pulse(t,1,4)-.45*pulse(t,1.1,3.6);pot.position.copy(heldPotPosition(point(poohHands[1]),pot.rotation.z));}
   else{const u=blend(t,4.5,5.5);pot.position.copy(putDown).multiplyScalar(1-u).add(resting.multiplyScalar(u));pot.rotation.z=0;}
-  const pick=blend(t,63.5,66),hand=point(poohHands[0],[0,0,.8]).add(new Vec3(0,-.3,0));
+  const pick=blend(t,63.5,66);outsidePot.rotation.z=-.15*pick;
+  const hand=heldPotPosition(point(poohHands[0]),outsidePot.rotation.z);
   outsidePot.position.set(.9,FLOOR,.95).multiplyScalar(1-pick).add(hand.multiplyScalar(pick));
-  outsidePot.rotation.z=-.15*pick;
   // 7. Kamera: interior → luar → melebar saat jatuh → penutup.
   const exterior=blend(t,5.5,12),wide=blend(t,27,31),fall=blend(t,46,48),outro=blend(t,61,65);
-  view.target=[mix(-4,-.8,exterior)+wide*1.5+fall*.9,-.35,0];
-  view.height=8.2+wide*.8+fall*.8-outro*.8;view.halfWidth=6.2+wide*1.6;
-  view.yaw=mix(-.85,.82,exterior)-wide*.18+outro*.1;view.pitch=.02;
+  // Pembuka melihat melalui kaca samping; dinding belakang menutupi sudut lama.
+  view.target=[mix(-4.6,-.8,exterior)+wide*1.5+fall*.9,mix(-.25,-.35,exterior),.3*(1-exterior)];
+  view.height=mix(5.8,8.2,exterior)+wide*.8+fall*.8-outro*.8;view.halfWidth=mix(3.5,6.2,exterior)+wide*1.6;
+  view.yaw=mix(-.35,.82,exterior)-wide*.18+outro*.1;view.pitch=.02;
   // Kamera menyertai kedatangan Tigger agar ekor, telinga dan rotasi miring terbaca.
   const arrival=pulse(t,23,29);
   view.target[0]=mix(view.target[0],1.7,arrival);

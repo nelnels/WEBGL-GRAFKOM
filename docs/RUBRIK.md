@@ -126,7 +126,7 @@ jarak pegangan, kontinuitas gerak, grounding dan replay deterministik.
 `tests/environment-check.mjs` memeriksa set rumah termasuk
 ruang pintu yang tidak ditutup mesh. [ANIMASI.md](ANIMASI.md) menjelaskan rumusnya.
 
-U menyembunyikan kontrol. Tidak ada dialog atau subtitle; judul hanya di awal/akhir.
+Halaman dibuka tanpa tulisan atau kontrol agar siap direkam. U menampilkan/menyembunyikan kontrol; Space menjeda dan R mengulang. Judul pembuka/penutup tidak ditampilkan.
 Video trailer, laporan, gambar per karakter dan data pengumpulan masih perlu disiapkan.
 
 Panduan membuka kode menurut rubrik: [PRESENTASI.md](PRESENTASI.md).
