@@ -1,3 +1,28 @@
 <!doctype html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Piglet — WebGL</title><link rel="stylesheet" href="styles/style.css"></head>
-<body data-character="piglet"><canvas id="scene" aria-label="Piglet 3D"></canvas><script type="module" src="src/main.js"></script></body></html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Piglet — WebGL</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body data-character="piglet">
+  <canvas id="scene" aria-label="Piglet 3D"></canvas>
+  <button id="geometry-toggle" type="button" aria-expanded="false" aria-controls="geometry-guide">Jelajahi geometri · G</button>
+  <aside id="geometry-guide" aria-labelledby="geometry-title" hidden>
+    <h2 id="geometry-title">Geometri Piglet</h2>
+    <p class="geometry-intro">Pilih bentuk untuk melihat bagian penyusunnya.</p>
+    <div class="geometry-options" role="group" aria-label="Sorot primitive">
+      <button type="button" data-primitive="original" aria-pressed="true">Warna asli</button>
+      <button type="button" data-primitive="ellipsoid" aria-pressed="false">Ellipsoid</button>
+      <button type="button" data-primitive="elliptic-paraboloid" aria-pressed="false">Paraboloid</button>
+      <button type="button" data-primitive="cylinder" aria-pressed="false">Cylinder</button>
+      <button type="button" data-primitive="curve" aria-pressed="false">Curve 3D</button>
+      <button type="button" data-primitive="parametric" aria-pressed="false">Surface / torus</button>
+    </div>
+    <p id="geometry-formula"></p>
+    <p id="geometry-description" aria-live="polite"></p>
+  </aside>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

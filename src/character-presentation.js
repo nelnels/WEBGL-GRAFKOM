@@ -1,6 +1,6 @@
 import {material} from './core/webgl.js';
 
-// Hanya UI halaman tigger.html. Modul karakter tetap bebas dari DOM.
+// UI bersama halaman karakter. Modul karakter tetap bebas dari DOM.
 const PRIMITIVES = {
   ellipsoid: {
     title: 'Ellipsoid', color: 0x2786c4,
@@ -25,13 +25,13 @@ const PRIMITIVES = {
 };
 
 // Daftar bagian berasal dari mesh aktual, bukan daftar anatomi yang ditulis ulang.
-function collectParts(character) {
+export function collectParts(character) {
   const inventory = new Map();
   character.root.traverse(mesh => {
     if (!mesh.geometry) return;
     const type = mesh.geometry.type;
     const part = mesh.name
-      .replace(/^Tigger-(ellipsoid|paraboloid|cylinder|curve|surface)-/, '')
+      .replace(/^(?:Tigger|Piglet|Pooh)-(ellipsoid|elliptic-paraboloid|paraboloid|cylinder|curve|surface|parametric)-/, '')
       .replace(/^Tigger-front-paw-/, 'telapak-tangan-')
       .replace(/-near(?=-|$)/g, '-dekat').replace(/-far(?=-|$)/g, '-jauh')
       .replace(/-(front|back)$/, '').replace(/-\d+(?=-|$)/g, '')
@@ -53,7 +53,7 @@ function describeParts(inventory, type) {
     .join('; ');
 }
 
-export function setupTiggerPresentation(character) {
+export function setupCharacterPresentation(character) {
   const toggle = document.querySelector('#geometry-toggle');
   const panel = document.querySelector('#geometry-guide');
   const description = document.querySelector('#geometry-description');

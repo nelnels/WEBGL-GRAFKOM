@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {Node,Vec3,rotationAxis,multiply,translation,scaling,transformPoint,normalMatrix,identity} from '../src/core/webgl.js';
 import * as primitives from '../src/geometry/primitives.js';
-import {createPooh} from '../src/characters/pooh.js';
-import {createPiglet} from '../src/characters/piglet.js';
+import {createPooh} from '../src/characters/pooh/index.js';
+import {createPiglet} from '../src/characters/piglet/index.js';
 import {createTigger} from '../src/characters/tigger/index.js';
 import {createCharacterTransforms,createDemoControls,ARBITRARY_AXIS} from '../src/animation/character-transforms.js';
 

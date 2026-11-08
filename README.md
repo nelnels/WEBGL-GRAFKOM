@@ -14,6 +14,9 @@ Halaman terpisah:
 Pada halaman demo karakter, keyboard 1/2/3 berpindah halaman. T/R/S/A/H mendemonstrasikan translate, rotate,
 scaling, rotasi sumbu bebas, dan hierarchy. 0/Esc kembali ke animasi normal.
 Space menjeda animasi, drag memutar kamera, dan scroll melakukan zoom.
+G membuka panel geometri pada ketiga halaman karakter. Pilih primitive untuk
+menyorot mesh serta melihat rumus dan modul pembangunnya; tutup panel untuk
+mengembalikan warna asli. Surface bebas juga mencakup torus pada pakaian.
 
 Penjelasan rubrik, rumus, lokasi implementasi WebGL, dan urutan presentasi tersedia
 di [RUBRIK.md](docs/RUBRIK.md). Jalankan pemeriksaan matematika/geometri dengan
@@ -28,14 +31,15 @@ WEBGL-GRAFKOM/
 |-- src/
 |   |-- main.js                       # Titik masuk dan pemuatan karakter
 |   |-- story-player.js               # Playback cerita dan loop rendering
-|   |-- tigger-presentation.js        # Panel sorot berdasarkan mesh nyata
+|   |-- character-presentation.js     # Panel sorot bersama ketiga karakter
 |   |-- core/webgl.js                 # Matriks, Node/Mesh, geometri, renderer
 |   |-- geometry/
 |   |   |-- primitives.js             # Helper geometri dasar
+|   |   |-- character-helpers.js      # Primitive bernama dan metadata Pooh/Piglet
 |   |   `-- quadrics.js               # Pembungkus primitive bernama
 |   |-- characters/
-|   |   |-- pooh.js
-|   |   |-- piglet.js
+|   |   |-- pooh/                      # index, materials, torso, head, ears, limbs
+|   |   |-- piglet/                    # index, materials, torso, head, ears, limbs
 |   |   `-- tigger/
 |   |       |-- index.js              # createTigger, perakitan dan update(t)
 |   |       |-- materials.js          # Warna
@@ -67,8 +71,8 @@ menunjukkan lokasi bentuk penyusunnya pada Tigger.
 | Item rubrik | File | Fungsi / metode |
 | --- | --- | --- |
 | 3D Curve | `src/characters/tigger/tail.js`; `src/geometry/primitives.js` | `buildTail()`; `line()` |
-| Object 1 — Pooh | `src/characters/pooh.js` | `createPooh()` |
-| Object 2 — Piglet | `src/characters/piglet.js` | `createPiglet()` |
+| Object 1 — Pooh | `src/characters/pooh/index.js` | `createPooh()` |
+| Object 2 — Piglet | `src/characters/piglet/index.js` | `createPiglet()` |
 | Object 3 — Tigger | `src/characters/tigger/index.js` | `createTigger()` |
 | Ellipsoid | `src/geometry/quadrics.js`; `src/characters/tigger/head.js` | `ELLIPSOID()`; `buildHead()` |
 | Elliptic paraboloid | `src/geometry/quadrics.js`; `src/characters/tigger/ears.js` | `ELLIPTIC_PARABOLOID()`; `buildEars()` |
@@ -81,6 +85,7 @@ menunjukkan lokasi bentuk penyusunnya pada Tigger.
 
 Rincian struktur Tigger tersedia di [TIGGER.md](docs/TIGGER.md). Badan dan perut
 Tigger adalah surface loft bebas; panel sorot menampilkan jenis tersebut tersendiri.
+Pembagian modul Pooh dan Piglet tersedia di [POOH-PIGLET.md](docs/POOH-PIGLET.md).
 
 ## Petualangan Layang-Layang (60 detik)
 

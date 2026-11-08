@@ -1,7 +1,7 @@
 import {Node,Vec3,transformPoint} from '../core/webgl.js';
 import * as primitives from '../geometry/primitives.js';
-import {createPooh} from '../characters/pooh.js';
-import {createPiglet} from '../characters/piglet.js';
+import {createPooh} from '../characters/pooh/index.js';
+import {createPiglet} from '../characters/piglet/index.js';
 import {createTigger} from '../characters/tigger/index.js';
 import {createKite,createKiteString} from '../scene/story-props.js';
 import {KITE_SNAG} from '../scene/environment.js';
