@@ -1,6 +1,6 @@
 import * as primitives from './primitives.js';
 
-// Named primitives for the presentation inventory; construction stays in primitives.js.
+// Primitive bernama untuk ketiga karakter; geometri tetap dibuat di primitives.js.
 export function createCharacterHelpers(character, helpers=primitives) {
   const named=(mesh,type,part)=>{mesh.name=`${character}-${type}-${part}`;return mesh;};
   return {

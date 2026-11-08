@@ -168,7 +168,7 @@ void main(){vec4 world=uModel*vec4(aPosition,1.0);vPosition=world.xyz;vNormal=uN
 const fragmentShader=`
 precision highp float;
 uniform vec3 uColor,uCamera;
-uniform float uRoughness,uReceivesShadow;
+uniform float uRoughness,uReceivesShadow,uSunlight,uOpacity;
 uniform sampler2D uShadow;
 uniform vec2 uTexel;
 varying vec3 vPosition,vNormal;
@@ -188,22 +188,27 @@ void main(){
  float diffuse=max(dot(n,l),0.0),visibility=shadow(n,l);
  float gloss=pow(max(dot(n,halfway),0.0),mix(72.0,8.0,uRoughness))*(1.0-uRoughness)*.22;
  float rim=pow(1.0-max(dot(n,view),0.0),3.0)*.09;
- vec3 color=tone(uColor*(.45+.15*n.y+1.22*diffuse*visibility+rim)+vec3(gloss*visibility));
+ // Cahaya matahari hangat dan pantulan langit menjaga bagian teduh tetap terbaca.
+ vec3 ambient=vec3(.45+.15*n.y)+uSunlight*vec3(.025,.035,.055);
+ vec3 sunlight=mix(vec3(1.22),vec3(1.65,1.40,1.05),uSunlight);
+ vec3 color=tone(uColor*(ambient+sunlight*diffuse*visibility+rim)+vec3(gloss*visibility));
  color=pow(color,vec3(1.0/2.2));
  // Keep the foreground clear when a narrow viewport moves the camera back.
  float fog=smoothstep(22.0,55.0,distance(uCamera,vPosition)-length(uCamera)+16.0);
- gl_FragColor=vec4(mix(color,vec3(.733,.906,.890),fog),1.0);
+ vec3 sky=mix(vec3(.733,.906,.890),vec3(.80,.91,.94),uSunlight);
+ gl_FragColor=vec4(mix(color,sky,fog),uOpacity);
 }`;
 const depthVertex=`attribute vec3 aPosition;uniform mat4 uMVP;void main(){gl_Position=uMVP*vec4(aPosition,1.0);}`;
 const depthFragment=`precision highp float;void main(){vec4 p=fract(gl_FragCoord.z*vec4(16777216.0,65536.0,256.0,1.0));p-=p.xxyz*vec4(0.0,1.0/256.0,1.0/256.0,1.0/256.0);gl_FragColor=p;}`;
 
 export class Renderer {
-  constructor(canvas){
+  constructor(canvas,{sunlight=0}={}){
+    this.sunlight=sunlight;
     const gl=canvas.getContext('webgl',{antialias:true,alpha:false});
     if(!gl)throw new Error('Browser tidak mendukung WebGL. Aktifkan hardware acceleration.');
     this.gl=gl;this.canvas=canvas;this.buffers=new WeakMap();this.shadowSize=1024;
     this.program=this.compile(vertexShader,fragmentShader);this.depthProgram=this.compile(depthVertex,depthFragment);
-    this.locations=this.locationsFor(this.program,['aPosition','aNormal'],['uModel','uViewProjection','uLightVP','uNormal','uColor','uCamera','uRoughness','uReceivesShadow','uShadow','uTexel']);
+    this.locations=this.locationsFor(this.program,['aPosition','aNormal'],['uModel','uViewProjection','uLightVP','uNormal','uColor','uCamera','uRoughness','uReceivesShadow','uSunlight','uOpacity','uShadow','uTexel']);
     this.depthLocations=this.locationsFor(this.depthProgram,['aPosition'],['uMVP']);
     this.lightVP=multiply(orthographic(-9,9,-7,10,.1,36),lookAt(new Vec3(6,10,7),new Vec3(0,.5,0)));
     this.shadowTexture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,this.shadowTexture);
@@ -250,18 +255,26 @@ export class Renderer {
     gl.clearColor(1,1,1,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(this.depthProgram);
     for(const mesh of meshes)if(mesh.castShadow){this.bind(mesh,this.depthLocations);gl.uniformMatrix4fv(this.depthLocations.uMVP,false,multiply(this.lightVP,mesh.world));gl.drawElements(gl.TRIANGLES,mesh.geometry.indices.length,gl.UNSIGNED_SHORT,0);}
     gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.enable(gl.DITHER);gl.viewport(0,0,this.canvas.width,this.canvas.height);
-    gl.clearColor(.733,.906,.890,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(this.program);
+    gl.clearColor(.733+.067*this.sunlight,.906+.004*this.sunlight,.890+.050*this.sunlight,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(this.program);
     const u=this.locations;gl.uniformMatrix4fv(u.uViewProjection,false,camera.viewProjection);gl.uniformMatrix4fv(u.uLightVP,false,this.lightVP);
+    gl.uniform1f(u.uSunlight,this.sunlight);
     gl.uniform3fv(u.uCamera,camera.eye.toArray());gl.uniform2f(u.uTexel,1/this.shadowSize,1/this.shadowSize);
     gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.shadowTexture);gl.uniform1i(u.uShadow,0);
+    // Kaca digambar sesudah benda padat, dari jauh ke dekat, tanpa menulis depth.
+    const transparent=mesh=>(mesh.material.opacity??1)<1;
+    const distance=mesh=>(mesh.world[12]-camera.eye.x)**2+(mesh.world[13]-camera.eye.y)**2+(mesh.world[14]-camera.eye.z)**2;
+    meshes.sort((a,b)=>Number(transparent(a))-Number(transparent(b))||(transparent(a)?distance(b)-distance(a):0));
     for(const mesh of meshes){
+      if(transparent(mesh)){gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);}else{gl.disable(gl.BLEND);gl.depthMask(true);}
       this.bind(mesh,u,true);gl.uniformMatrix4fv(u.uModel,false,mesh.world);gl.uniformMatrix3fv(u.uNormal,false,normalMatrix(mesh.world));
       gl.uniform1f(u.uReceivesShadow,mesh.receiveShadow?1:0);
       const groups=mesh.geometry.groups.length?mesh.geometry.groups:[{start:0,count:mesh.geometry.indices.length,materialIndex:0}];
       for(const group of groups){const mat=Array.isArray(mesh.material)?mesh.material[group.materialIndex]:mesh.material;
         gl.uniform3fv(u.uColor,mat.color);gl.uniform1f(u.uRoughness,mat.roughness);
+        gl.uniform1f(u.uOpacity,mat.opacity??1);
         gl.drawElements(gl.TRIANGLES,group.count,gl.UNSIGNED_SHORT,group.start*2);
       }
     }
+    gl.depthMask(true);gl.disable(gl.BLEND);
   }
 }

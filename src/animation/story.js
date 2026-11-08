@@ -1,4 +1,4 @@
-﻿import {Node,Vec3,transformPoint} from '../core/webgl.js';
+import {Node,Vec3,transformPoint} from '../core/webgl.js';
 import * as primitives from '../geometry/primitives.js';
 import {createPooh} from '../characters/pooh/index.js';
 import {createPiglet} from '../characters/piglet/index.js';
@@ -6,12 +6,37 @@ import {createTigger} from '../characters/tigger/index.js';
 import {createDoorwaySet,FLOOR} from '../scene/doorway-set.js';
 
 export const STORY_DURATION=68;
+// Penanda bab untuk slider/presentasi; transisi pose tetap memakai interpolasi halus.
+export const STORY_PHASES=[
+ {start:0,id:'eat',label:'Pooh menikmati madu'},
+ {start:10,id:'stuck',label:'Pooh terjepit di pintu'},
+ {start:14,id:'piglet',label:'Piglet mencoba membantu'},
+ {start:24,id:'help',label:'Tigger ikut membantu'},
+ {start:30,id:'pull',label:'Dua usaha menarik bersama'},
+ {start:48,id:'fall',label:'Lepas dan jatuh bergantian'},
+ {start:55,id:'rise',label:'Bangun bergantian'},
+ {start:63,id:'honey',label:'Pooh kembali meraih madu'}
+];
+const STORY_TIMING={
+ firstPull:[30.5,33,35.5,38.5],secondPull:[40.5,47.8,48,48.5],
+ release:[48,49.2],fall:[48.5,50.5],rise:[56,59.5]
+};
+function getStoryPhase(t){
+ let chapter=0;
+ for(let i=1;i<STORY_PHASES.length;i++)if(t>=STORY_PHASES[i].start)chapter=i;
+ return {phase:STORY_PHASES[chapter].id,chapter};
+}
+// Interpolasi: waktu absolut → u halus → posisi/sudut, tanpa akumulasi antar-frame.
 const clamp=x=>Math.max(0,Math.min(1,x));
 const ease=x=>{x=clamp(x);return x*x*(3-2*x);};
 const blend=(t,a,b)=>ease((t-a)/(b-a));
 const mix=(a,b,u)=>a+(b-a)*u;
 const pulse=(t,a,b)=>blend(t,a,a+.5)*(1-blend(t,b-.5,b));
-const effort=t=>.7*blend(t,30.5,33)*(1-blend(t,35.5,38.5))+blend(t,40.5,47.8)*(1-blend(t,48,48.5));
+const effort=t=>{
+ const [a,b,c,d]=STORY_TIMING.firstPull,[e,f,g,h]=STORY_TIMING.secondPull;
+ return .7*blend(t,a,b)*(1-blend(t,c,d))+blend(t,e,f)*(1-blend(t,g,h));
+};
+// Titik dunia untuk dukungan lantai serta kontak tangan antar-karakter.
 function lowestPoint(root){
  let low=Infinity;root.traverse(m=>{if(!m.geometry)return;const p=m.geometry.positions,w=m.world;
  for(let j=0;j<p.length;j+=3)low=Math.min(low,w[1]*p[j]+w[5]*p[j+1]+w[9]*p[j+2]+w[13]);});return low;
@@ -20,6 +45,7 @@ const point=(node,p=[0,0,0])=>transformPoint(node.world,new Vec3(...p));
 const average=nodes=>nodes.reduce((p,n)=>p.add(point(n)),new Vec3()).multiplyScalar(1/nodes.length);
 
 export function createStory(){
+ // 1. Perakitan set, karakter, pose awal, dan referensi telapak yang dipakai cerita.
  const root=new Node('Pooh-stuck-in-the-door');
  const {root:set,pot,outsidePot}=createDoorwaySet();root.add(set);
  const characters=[createPooh(primitives),createPiglet(primitives),createTigger(primitives)],sizes=[.48,.72,.78];
@@ -31,16 +57,18 @@ export function createStory(){
  const tigerHand=root.getObjectByName('Tigger-front-paw-near');
  const view={target:[-1,-.25,0],height:9,halfWidth:7,yaw:-.85,pitch:.02};
  function pose(t){
-  const pulling=effort(t),released=blend(t,48,49.2);
+  // 2. Reset pose sebelum menerapkan gerakan pada waktu t (seek/replay deterministik).
+  const pulling=effort(t),released=blend(t,...STORY_TIMING.release);
   characters.forEach((c,i)=>{
    saved[i].forEach(r=>{r.node.position.copy(r.position);r.node.rotation.copy(r.rotation);r.node.scale.copy(r.scale);});
    const yaw=i===0?mix(-Math.PI/2,Math.PI/2,blend(t,5,6.5)):i===1?-Math.PI/2:Math.PI;
    c.root.rotation.set(0,yaw,0);c.root.scale.setScalar(sizes[i]);c.root.axis.set(1,1,.5).normalize();c.root.axisAngle=0;
-   const fall=blend(t,48.5+i*.45,50.5+i*.45)*(1-blend(t,56+i*.7,59.5+i*.7));
+   const fall=blend(t,STORY_TIMING.fall[0]+i*.45,STORY_TIMING.fall[1]+i*.45)*(1-blend(t,STORY_TIMING.rise[0]+i*.7,STORY_TIMING.rise[1]+i*.7));
    const walk=i===0?pulse(t,5,10):i===1?pulse(t,14,19):pulse(t,23,29);
    c.parts.head.rotation.set(.06,0,0);
    c.parts.legs.forEach((leg,j)=>leg.rotation.x=(j?1:-1)*Math.sin(t*6)*.19*walk);
    c.parts.arms.forEach((arm,j)=>arm.rotation.set((j?1:-1)*Math.sin(t*6)*.14*walk,0,0));
+   // 3a. Pooh: makan, terjepit, menahan tarikan, lalu kembali meraih madu.
    if(i===0){
     const squeeze=.15*pulse(t,47.7,49.6);
     c.root.scale.x*=1-squeeze;c.root.scale.y*=1+squeeze*.35;
@@ -58,6 +86,7 @@ export function createStory(){
     c.parts.arms[0].rotation.x-=.8*blend(t,63,66);
     c.parts.head.rotation.x+=.3*blend(t,63,66);
    }
+   // 3b. Piglet: mendekat, memegang tangan Pooh, dan menarik dengan badan/kaki.
    if(i===1){
     c.root.position.set(mix(2.2,-.25,blend(t,14,19))+released*2.2,0,.05);
     c.parts.head.rotation.y=.45*pulse(t,14,17);
@@ -69,6 +98,7 @@ export function createStory(){
     c.parts.head.rotation.y-=.65*blend(t,64,66);
     c.parts.arms[0].rotation.z-=1.2*blend(t,65,66);
    }
+   // 3c. Tigger: mendekat, membantu Piglet, merendah saat bersiap.
    if(i===2){
     c.root.position.set(mix(6,2.4,blend(t,23,29))+released*1.8,0,-.05);
     c.body.position.set(0,.22,0);c.body.rotation.z=.07*pulling;
@@ -84,20 +114,35 @@ export function createStory(){
     c.parts.head.rotation.z=.15*pulse(t,24,27);
     c.parts.head.rotation.y-=.5*blend(t,64,66);
     c.parts.arms[0].rotation.z+=.8*blend(t,65,66);
+    // Saat mendekat, Tigger menyeimbangkan badan pada sumbu diagonal yang terlihat jelas.
+    c.root.axisAngle+=.48*pulse(t,24,27.8);
+    // Sesudah menolong, menghadap penonton dan melambai bertingkat dari bahu ke telapak.
+    const greeting=blend(t,60,63);
+    c.root.rotation.y=mix(yaw,-.35,greeting);
+    c.root.position.z-=1.2*greeting;
+    const shoulder=pulse(t,61,68),elbow=pulse(t,62,68),wrist=pulse(t,63,68);
+    c.parts.arms[0].rotation.z+=shoulder*(.85+.12*Math.sin(t*4));
+    c.root.getObjectByName('Tigger-elbow-near').rotation.z+=elbow*(.65+.22*Math.sin(t*5));
+    tigerHand.rotation.z+=wrist*.3*Math.sin(t*6);
+    // Squash sesaat saat bersiap menyapa; kembali ke proporsi normal, tanpa memanjangkan badan.
+    const anticipation=.22*pulse(t,60,62.5);
+    c.root.scale.y*=1-anticipation;
+    c.root.scale.x*=1+anticipation*.35;c.root.scale.z*=1+anticipation*.35;
    }
    if(fall>0){
     c.root.axis.set(-Math.sin(yaw),0,Math.cos(yaw));c.root.axisAngle=-1.4*fall;
     if(i===2){
-     // Tigger's long body rolls onto its side instead of balancing on its tail.
+     // Badan Tigger yang memanjang berguling ke samping saat jatuh.
      c.root.axis.set(-1,0,0);c.root.axisAngle=1.57*fall;
      c.root.position.x+=.35*fall;c.root.position.z-=1.75*fall;
     }
     c.parts.arms.forEach((arm,j)=>arm.rotation.z+=(j?1:-1)*.8*fall);
     c.parts.legs.forEach((leg,j)=>leg.rotation.x+=(j?1:-1)*.45*fall);
    }
+   // 4. Dukungan lantai berdasarkan vertex dunia setelah seluruh rotasi/skala.
    c.root.updateWorld();c.root.position.y=FLOOR+.015-lowestPoint(c.root);c.root.updateWorld();
   });
-  // Rigid contact constraints: helpers follow the grip, not a separate guessed path.
+  // 5. Kontak: posisi penolong mengikuti titik pegangan dunia pada X/Z.
   const pig=characters[1],tiger=characters[2];
   let d=average(poohHands).sub(average(pigHands));
   const pigGrip=blend(t,19,21)*(1-blend(t,48.8,50));
@@ -111,19 +156,24 @@ export function createStory(){
  pose(4.5);const putDown=point(poohHands[1]).add(new Vec3(0,-.3,0));
  return {root,set,characters,view,update(seconds){
   const t=Math.max(0,Math.min(STORY_DURATION,seconds)),contacts=pose(t);
+  // 6. Properti: pot mengikuti tangan saat diangkat dan bangku saat diletakkan.
   const resting=new Vec3(-4.8,-1.6,1.65);
   if(t<4.5){pot.position.copy(point(poohHands[1])).add(new Vec3(0,-.3,0));pot.rotation.z=-.25*pulse(t,1,4);}
   else{const u=blend(t,4.5,5.5);pot.position.copy(putDown).multiplyScalar(1-u).add(resting.multiplyScalar(u));pot.rotation.z=0;}
   const pick=blend(t,63.5,66),hand=point(poohHands[0],[0,0,.8]).add(new Vec3(0,-.3,0));
   outsidePot.position.set(.9,FLOOR,.95).multiplyScalar(1-pick).add(hand.multiplyScalar(pick));
   outsidePot.rotation.z=-.15*pick;
+  // 7. Kamera: interior → luar → melebar saat jatuh → penutup.
   const exterior=blend(t,5.5,12),wide=blend(t,27,31),fall=blend(t,46,48),outro=blend(t,61,65);
   view.target=[mix(-4,-.8,exterior)+wide*1.5+fall*.9,-.35,0];
   view.height=8.2+wide*.8+fall*.8-outro*.8;view.halfWidth=6.2+wide*1.6;
   view.yaw=mix(-.85,.82,exterior)-wide*.18+outro*.1;view.pitch=.02;
+  // Kamera menyertai kedatangan Tigger agar ekor, telinga dan rotasi miring terbaca.
+  const arrival=pulse(t,23,29);
+  view.target[0]=mix(view.target[0],1.7,arrival);
+  view.halfWidth+=1.1*arrival;
   root.updateWorld();
-  const phase=t<10?'eat':t<14?'stuck':t<24?'piglet':t<30?'help':t<48?'pull':t<55?'fall':t<63?'rise':'honey';
-  const chapter=['eat','stuck','piglet','help','pull','fall','rise','honey'].indexOf(phase);
+  const {phase,chapter}=getStoryPhase(t);
   return {time:t,phase,chapter,title:t<3?'Sedikit Terlalu Banyak Madu':t>=66?'Masih ingin madu?':'',caption:'',ended:t>=STORY_DURATION,...contacts};
  }};
 }

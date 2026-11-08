@@ -4,7 +4,7 @@ import {createStory,STORY_DURATION} from './animation/story.js';
 
 export function startStory(canvas){
   const story=createStory();
-  const renderer=new Renderer(canvas),camera=createCamera(canvas,story.view);
+  const renderer=new Renderer(canvas,{sunlight:1}),camera=createCamera(canvas,story.view);
   const panel=document.querySelector('#story-controls');
   const title=document.querySelector('#chapter-title'),heading=document.querySelector('#story-heading');
   const seek=document.querySelector('#story-time'),clock=document.querySelector('#story-clock'),play=document.querySelector('#play-story');

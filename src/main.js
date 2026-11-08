@@ -1,6 +1,5 @@
 import {Node,Renderer} from './core/webgl.js';
 import * as primitives from './geometry/primitives.js';
-import {createEnvironment} from './scene/environment.js';
 import {createCamera} from './scene/camera.js';
 import {createCharacterTransforms,createDemoControls} from './animation/character-transforms.js';
 
@@ -22,7 +21,8 @@ async function start(){
   character.root.position.set(...selected.position);
   const {setupCharacterPresentation}=await import('./character-presentation.js');
   setupCharacterPresentation(character);
-  const scene=new Node('Scene');scene.add(createEnvironment());scene.add(character.root);
+  // Demo karakter memakai latar kosong; set rumah hanya dibangun oleh cerita.
+  const scene=new Node('Scene');scene.add(character.root);
   const renderer=new Renderer(canvas),camera=createCamera(canvas,character.view);
   const motion=createCharacterTransforms({root:character.root,body:character.body});
   const pages=['pooh.html','piglet.html','tigger.html'];

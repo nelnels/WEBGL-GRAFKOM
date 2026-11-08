@@ -86,7 +86,7 @@ Cylinder memakai radius atas sama dengan radius bawah.
 - `src/characters/pooh/index.js`, `src/characters/piglet/index.js`, `src/characters/tigger/index.js`: geometri serta hierarchy masing-masing karakter.
 - `src/animation/character-transforms.js`: lima transformasi untuk karakter pada halaman aktif.
 - `src/scene/camera.js`: kamera orbit berbasis event pointer, matriks view dan projection.
-- `src/scene/environment.js`: tanah, pohon, batu, bunga, dan awan.
+- `src/scene/doorway-set.js`: set rumah, pintu, lantai, dan pot madu untuk adegan cerita. Halaman demo karakter memakai latar kosong.
 - `src/main.js`: pemilihan satu model, loop requestAnimationFrame, resize dan rendering.
 
 Environment dan transisi halus sudah diimplementasikan; nilai estetika tetap
@@ -123,8 +123,14 @@ berdasarkan penilaian dosen.
 
 `tests/story-check.mjs` memeriksa durasi 68 detik, fase, waktu pelepasan,
 jarak pegangan, kontinuitas gerak, grounding dan replay deterministik.
-`tests/environment-check.mjs` memeriksa hutan demo serta set rumah termasuk
+`tests/environment-check.mjs` memeriksa set rumah termasuk
 ruang pintu yang tidak ditutup mesh. [ANIMASI.md](ANIMASI.md) menjelaskan rumusnya.
 
 U menyembunyikan kontrol. Tidak ada dialog atau subtitle; judul hanya di awal/akhir.
 Video trailer, laporan, gambar per karakter dan data pengumpulan masih perlu disiapkan.
+
+Panduan membuka kode menurut rubrik: [PRESENTASI.md](PRESENTASI.md).
+Set cerita sekarang mempunyai rumah berjendela dan berdinding belakang, panel kaca,
+atap pelana, cerobong, sembilan pohon, matahari, awan dan taman bunga. Demo karakter
+berlatar kosong. Perakit set memanggil `buildGround()`, `buildHouse()`, `buildTrees()`,
+`buildSky()` dan `buildGarden()` tanpa mengganti urutan mesh.

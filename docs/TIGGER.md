@@ -32,6 +32,9 @@ Penataan file mempertahankan geometri, warna, urutan mesh, hierarki, view, dan a
 
 `index.js` juga menampung helper surface dan pita belang yang dipakai bersama.
 Rumus dan angka aslinya dipindahkan tanpa mengganti tessellation atau perhitungan.
+`quadrics.js` mempertahankan API Tigger dan meneruskan empat helper primitive ke
+`createCharacterHelpers()` yang dipakai bersama Pooh/Piglet. Geometri dasarnya
+tetap dibuat di `primitives.js`; nama mesh dan hierarki tidak berubah.
 
 ## Panel sorot
 
@@ -49,7 +52,9 @@ Menutup panel dengan **G** mengembalikan material asli.
 ## Berkas verifikasi
 
 - `tests/check.mjs`: geometri, persamaan quadric, primitive, transformasi, dan navigasi.
-- `tests/story-check.mjs`: timeline, kontak paw, seek/replay, salto, grounding, dan kelancaran rute.
+- `tests/story-check.mjs`: cerita pintu 68 detik, kontak pegangan, dua tarikan, jatuh/bangun berselang, grounding, dan seek/replay.
 - `tests/environment-check.mjs`: geometri dan transformasi lingkungan.
 
 Jalankan: `node tests/check.mjs && node tests/story-check.mjs && node tests/environment-check.mjs`.
+
+Urutan demo dan peta rubrik seluruh proyek: [PRESENTASI.md](PRESENTASI.md).

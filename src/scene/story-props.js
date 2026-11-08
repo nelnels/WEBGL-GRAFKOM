@@ -1,7 +1,7 @@
-import {Node,Mesh,material,geometry} from '../core/webgl.js';
+import {Mesh,geometry} from '../core/webgl.js';
 
 
-// Small reusable solid props; all geometry is generated locally.
+// Balok penyusun set rumah; seluruh geometri dibuat secara prosedural.
 export function block(parent,p,size,mat){
   const [x,y,z]=size.map(v=>v/2),vertices=[],normals=[],indices=[];
   for(const [n,face]of [

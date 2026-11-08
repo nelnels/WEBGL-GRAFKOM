@@ -1,7 +1,11 @@
-﻿# Animasi: Pooh Terjepit di Pintu
+# Animasi: Pooh Terjepit di Pintu
 
 Film 68 detik tanpa percakapan. Semua pose ada di `src/animation/story.js`.
 Environment khusus cerita ada di `src/scene/doorway-set.js`.
+Pada detik 24–27.8, Tigger menyeimbangkan badan pada sumbu diagonal saat datang.
+Detik 60–63 menampilkan squash persiapan dan berbalik ke penonton, kemudian
+lambaian bertingkat bahu, siku dan telapak sampai penutup. Kamera kedatangan
+melebar agar gerak dan ekor tetap terbaca dalam cerita.
 Tetap WebGL murni; bentuk dan struktur modul karakter dipertahankan.
 
 ## Penjelasan untuk presentasi
@@ -27,10 +31,15 @@ Tetap WebGL murni; bentuk dan struktur modul karakter dipertahankan.
    rumah menuju sisi luar. Kamera melebar sebelum jatuh, lalu mendekat sedikit
    untuk penutup. Kontrol drag/zoom tetap tersedia.
 
-Rumah disusun dari balok: dua dinding samping pintu dan satu lintel di atasnya.
-Bagian tengah pintu kosong. Belakang rumah terbuka dan dinding dekat kamera
-rendah agar pembuka di dalam rumah terlihat. Batang/pot memakai cylinder,
-daun memakai ellipsoid, bibir pot memakai torus.
+Rumah disusun dari balok dan panel kaca. Bagian tengah pintu kosong, belakang
+rumah tertutup dinding, sedangkan kaca sisi kamera memperlihatkan interior.
+`buildHouse()` menyusun rumah, jendela, atap dan cerobong; `buildGround()`,
+`buildTrees()`, `buildSky()`, `buildGarden()` menyusun bagian environment lainnya.
+Batang/pot memakai cylinder, daun memakai ellipsoid, bibir pot memakai torus.
+
+`STORY_PHASES` menamai bab; `STORY_TIMING` memusatkan waktu tarikan, pelepasan,
+jatuh dan bangun. Komentar bagian 1–7 memandu pembacaan dari perakitan sampai kamera.
+Panduan demonstrasi lengkap: [PRESENTASI.md](PRESENTASI.md).
 
 `update(seconds)` mengembalikan semua bagian ke pose awal sebelum menerapkan
 transformasi berdasarkan waktu absolut. Karena itu seek dan replay tidak bergantung
