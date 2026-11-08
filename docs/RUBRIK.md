@@ -10,7 +10,7 @@ kanvas; JavaScript menghitung geometri dan transformasi; GLSL merendernya di GPU
 2. Klik kanan `pooh.html`, lalu **Open with Live Server**.
 3. Untuk Piglet, buka `piglet.html` dengan cara yang sama.
 4. Untuk Tigger, buka `tigger.html` dengan cara yang sama.
-5. `index.html` menampilkan cerita 60 detik dengan ketiga karakter dalam satu environment.
+5. `index.html` menampilkan film Pooh terjepit 68 detik dengan ketiga karakter dalam satu environment.
 
 Contoh URL bila Live Server berjalan di port 5500:
 
@@ -94,20 +94,37 @@ berdasarkan penilaian dosen.
 
 ## Bukti rubrik dalam cerita utama
 
-Cerita: **Petualangan Layang-Layang**, durasi 60 detik. Piglet kehilangan kendali layang-layang, mencoba meraih tetapi gagal, lalu dibantu Pooh dan Tigger. Klimaks terjadi ketika tangan Tigger benar-benar mencapai layang-layang di cabang. Akhir memperlihatkan layang-layang kembali terbang.
+**Sedikit Terlalu Banyak Madu**, film 68 detik tanpa percakapan. Adaptasi bebas
+*Winnie-the-Pooh*, bab 2; Piglet dan Tigger menjadi penolong untuk versi tiga karakter.
 
-| Kriteria | Adegan / implementasi |
+| Detik | Adegan |
 | --- | --- |
-| Tiga karakter, satu environment | `index.html`: Pooh, Piglet, dan Tigger dalam satu hutan; rumah, jembatan, dan pohon terhubung oleh jalur cerita |
-| Translate | Piglet mengejar layang-layang (8-15); Tigger melewati jembatan (25-30); lompatan penyelamatan (38.5-44.5) |
-| Rotate | Badan menghadap arah perjalanan; kepala menoleh dan mendongak; tangan menunjuk/melambai |
-| Scaling | Tigger melakukan squash saat bersiap (36-39.5), lalu kembali ke proporsi normal saat meraih layang-layang |
-| Arbitrary axis | Tigger melakukan salto penuh 360° terhadap sumbu ternormalisasi (1, 1, 0.5), detik 41.6-44.3 |
-| Hierarchy | Gerakan dari pivot bahu; kepala, tangan, kaki mengikuti badan; lutut dan ekor Tigger bergerak |
-| 3D curve pada karakter | Lengan Pooh, detail wajah Piglet, ekor/detail wajah Tigger |
-| Ellipsoid / cylinder / quadric lain | Geometri karakter dipertahankan; moncong Pooh, telinga Piglet, serta telinga Tigger berupa paraboloid |
-| Environment / kelancaran | Hutan berlapis, rumah, sungai, jembatan, jalan, bunga, kupu-kupu; transisi halus, kamera mengikuti adegan |
+| 0–6 | Pooh menghabiskan madu, meletakkan pot pada bangku dan berdiri menghadap pintu. |
+| 6–14 | Pooh berjalan ke pintu, tersangkut, mencoba maju-mundur dan melihat perutnya. |
+| 14–24 | Piglet mendekat, meraih kedua tangan Pooh, lalu mencoba menarik sendiri. |
+| 24–30 | Tigger mendekat dan memegang bagian belakang tubuh Piglet. |
+| 30–39 | Tarikan pertama: mengatur kaki, menarik, bertahan, kemudian mengendur. |
+| 39–48 | Mereka menekuk kaki lagi; tarikan kedua meningkat sampai Pooh mulai lepas. |
+| 48–55 | Pooh lepas dan jatuh lebih dulu, disusul Piglet dan Tigger. |
+| 55–63 | Mereka bangun bergantian. |
+| 63–68 | Pooh meraih pot madu lagi; Piglet dan Tigger menoleh serta mengangkat tangan. |
 
-Implementasi cerita ada di `src/animation/story.js`; properti dan tali di `src/scene/story-props.js`. Timeline memakai waktu absolut agar seek dan replay menghasilkan pose yang sama. Tangan Tigger bertemu layang-layang di detik 41; tali mengikuti posisi tangan Piglet dan mengendur saat persiapan.
+| Kriteria | Implementasi |
+| --- | --- |
+| Tiga karakter dalam satu environment | Pooh, Piglet dan Tigger pada satu halaman rumah sederhana |
+| Translate | Pooh keluar; kedua penolong mendekat; posisi mengikuti titik pegangan saat menarik |
+| Rotate | Kepala menoleh, tangan meraih, badan condong, kaki mengatur pijakan |
+| Scaling | Tigger merendah sebelum menarik; Pooh sedikit menyempit saat lepas dari pintu |
+| Arbitrary axis | Tigger sedikit miring pada sumbu ternormalisasi (1,1,0.5) saat menarik; jatuh juga memakai axis-angle |
+| Hierarchy | Semua anggota tubuh mengikuti root/body; titik tangan dihitung dari matriks dunia |
+| 3D curve dan quadric lain | Geometri karakter tetap: lengan Pooh/ekor Tigger, moncong Pooh dan telinga Piglet/Tigger |
+| Environment | Balok dinding/atap/bangku, cylinder batang/pot, ellipsoid daun, torus bibir pot |
+| Kelancaran | Interpolasi halus, dua tarikan berbeda, jatuh/bangun berselang, dan grounding |
 
-U menyembunyikan kontrol untuk rekaman, sementara judul dan subtitle tetap tampil. Dialog berupa teks, belum ada audio. Rekaman video 1 menit, unggahan YouTube, minimal dua gambar per karakter, dan dokumen pengumpulan tetap perlu disiapkan. Estetika dan kemiripan tetap dinilai dosen.
+`tests/story-check.mjs` memeriksa durasi 68 detik, fase, waktu pelepasan,
+jarak pegangan, kontinuitas gerak, grounding dan replay deterministik.
+`tests/environment-check.mjs` memeriksa hutan demo serta set rumah termasuk
+ruang pintu yang tidak ditutup mesh. [ANIMASI.md](ANIMASI.md) menjelaskan rumusnya.
+
+U menyembunyikan kontrol. Tidak ada dialog atau subtitle; judul hanya di awal/akhir.
+Video trailer, laporan, gambar per karakter dan data pengumpulan masih perlu disiapkan.

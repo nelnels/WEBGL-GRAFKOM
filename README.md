@@ -6,7 +6,7 @@ Buka folder ini di VS Code, lalu klik kanan **index.html -> Open with Live Serve
 
 Halaman terpisah:
 
-- `index.html`: cerita 60 detik, ketiga karakter dalam satu hutan.
+- `index.html`: film tanpa percakapan 68 detik, Pooh terjepit di pintu lalu ditolong Piglet/Tigger.
 - `pooh.html`: demo Winnie the Pooh.
 - `piglet.html`: hanya Piglet.
 - `tigger.html`: hanya Tigger.
@@ -87,27 +87,41 @@ Rincian struktur Tigger tersedia di [TIGGER.md](docs/TIGGER.md). Badan dan perut
 Tigger adalah surface loft bebas; panel sorot menampilkan jenis tersebut tersendiri.
 Pembagian modul Pooh dan Piglet tersedia di [POOH-PIGLET.md](docs/POOH-PIGLET.md).
 
-## Petualangan Layang-Layang (60 detik)
+## Sedikit Terlalu Banyak Madu (68 detik)
 
-Buka `index.html`. Piglet bermain layang-layang, angin menyangkutkannya di pohon, dan ketiga sahabat mencari cara untuk membebaskannya. Cerita memiliki upaya gagal, kerja sama, klimaks penyelamatan, dan akhir ketika layang-layang terbang kembali.
+Buka `index.html` melalui Live Server. Pooh menghabiskan madu lalu terjepit di pintu.
+Piglet mencoba menolong; Tigger ikut membantu. Setelah dua usaha bersama, Pooh
+lepas dan ketiganya jatuh bergantian. Penutupnya, Pooh kembali meraih pot madu.
+Tanpa percakapan, subtitle maupun audio. Judul hanya di pembuka dan penutup.
+
+Adaptasi bebas *Winnie-the-Pooh*, bab 2: Pooh terjepit setelah makan di rumah Rabbit.
+Penolong diganti menjadi Piglet dan Tigger serta kejadiannya dipadatkan untuk film ini.
 
 | Detik | Adegan |
 | --- | --- |
-| 0-8 | Piglet menerbangkan layang-layang; Pooh keluar dari arah rumah. |
-| 8-15 | Angin membawa layang-layang ke cabang; Piglet mengejarnya. |
-| 15-25 | Piglet gagal meraih; Pooh menunjuk dan membantu mencari cara. |
-| 25-35 | Tigger menyeberangi jembatan, berlari, lalu mencoba melompat. |
-| 35-41 | Piglet mengendurkan tali; Pooh menunjuk cabang; Tigger merendah dan melesat. |
-| 41-48 | Tangan Tigger menyentuh layang-layang; ia turun dan melepaskannya kembali. |
-| 48-60 | Layang-layang terbang lagi; ketiganya merayakan dan menyapa penonton. |
+| 0–6 | Pooh menghabiskan madu, meletakkan pot pada bangku dan berdiri menghadap pintu. |
+| 6–14 | Pooh berjalan ke pintu, tersangkut, mencoba maju-mundur dan melihat perutnya. |
+| 14–24 | Piglet mendekat, meraih kedua tangan Pooh, lalu mencoba menarik sendiri. |
+| 24–30 | Tigger mendekat dan memegang bagian belakang tubuh Piglet. |
+| 30–39 | Tarikan pertama: mengatur kaki, menarik, bertahan, kemudian mengendur. |
+| 39–48 | Mereka menekuk kaki lagi; tarikan kedua meningkat sampai Pooh mulai lepas. |
+| 48–55 | Pooh lepas dan jatuh lebih dulu, disusul Piglet dan Tigger. |
+| 55–63 | Mereka bangun bergantian. |
+| 63–68 | Pooh meraih pot madu lagi; Piglet dan Tigger menoleh serta mengangkat tangan. |
 
-Environment berisi rumah Pooh, sungai, jembatan kayu, jalur tanah, clearing, pohon penyelamatan, bukit, bunga, semak, dan kupu-kupu. Kamera mengikuti perkembangan cerita. Dialog tampil sebagai subtitle; belum ada audio.
+Environment khusus cerita dibuat sederhana: rumah dengan bagian belakang terbuka,
+pintu yang benar-benar berlubang, halaman datar, tiga pohon, bangku, serta dua pot madu.
+Halaman demo karakter tetap memakai hutan semula. Kamera bergerak dari dalam rumah
+ke sisi luar, kemudian melebar saat ketiganya jatuh.
 
-Space: putar/jeda. R: ulangi. U: sembunyikan kontrol (judul dan subtitle tetap tampil untuk video). Slider: pilih waktu. Drag/scroll: kamera. Cerita berhenti pada detik 60. Preferensi reduced motion memulai cerita dalam keadaan jeda; tekan Putar untuk menonton.
+Space: putar/jeda. R: ulangi. U: sembunyikan kontrol. Slider: pilih waktu 0–68.
+Drag/scroll: kamera. Preferensi reduced motion memulai cerita dalam keadaan jeda.
 
-- `src/animation/story.js`: timeline, pose, interaksi, kamera, dan transformasi.
-- `src/scene/story-props.js`: layang-layang, tali yang mengikuti tangan, dan properti solid.
-- `src/scene/environment.js`: lingkungan dan gerak ambient.
-- `src/story-player.js`: playback, renderer, dan kontrol halaman.
+- `src/animation/story.js`: pose, dua usaha menarik, kontak, jatuh dan kamera.
+- `src/scene/doorway-set.js`: environment cerita dan pot madu prosedural.
+- `src/scene/story-props.js`: helper balok.
+- `src/story-player.js`: playback, seek, replay dan rendering WebGL.
 
-Pemeriksaan: `node tests/check.mjs`, `node tests/story-check.mjs`, dan `node tests/environment-check.mjs`.
+Pemeriksaan: `node tests/check.mjs`, `node tests/story-check.mjs`,
+`node tests/environment-check.mjs`, dan `node tests/character-refactor-check.mjs`.
+Penjelasan gerak untuk presentasi: [ANIMASI.md](docs/ANIMASI.md).

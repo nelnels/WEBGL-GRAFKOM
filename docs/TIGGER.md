@@ -43,7 +43,7 @@ Paraboloid terdapat pada telinga; telapak kaki adalah ellipsoid.
 Daftar bagian dan jumlahnya dihitung dari `geometry.type` serta nama mesh nyata.
 Nama file sumber berasal dari `import.meta.url` modul pembangun dan disimpan sebagai
 `sourceFile`. Jadi daftar panel mengikuti kode, termasuk pengecualian nama
-`Tigger-front-paw-near/far` yang dipertahankan untuk interaksi layang-layang.
+`Tigger-front-paw-near/far` yang dipertahankan untuk interaksi properti cerita.
 Menutup panel dengan **G** mengembalikan material asli.
 
 ## Berkas verifikasi
