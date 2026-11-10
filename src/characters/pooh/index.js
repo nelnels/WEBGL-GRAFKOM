@@ -5,10 +5,11 @@ import {buildMaterials} from './materials.js';
 import {buildTorso} from './torso.js';
 import {buildHead} from './head.js';
 import {buildLimbs} from './limbs.js';
+import {bezierLine} from './bezier.js';
 
 export function createPooh(helpers=primitives) {
   const materials=buildMaterials(helpers.black);
-  const geometry=createCharacterHelpers('Pooh',helpers);
+  const geometry=createCharacterHelpers('Pooh',{...helpers,line:bezierLine});
   const root=new Node('Pooh'),body=new Node('Pooh-body');body.position.y=.05;root.add(body);
   buildTorso(body,geometry,materials);
   const head=buildHead(body,geometry,materials);

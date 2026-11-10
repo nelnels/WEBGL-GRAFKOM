@@ -19,6 +19,11 @@ Telinga Piglet mempertahankan tessellation 24 × 48 dan pusat y = 0.55.
 Moncong Pooh adalah elliptic paraboloid. Baju Pooh memakai potongan permukaan
 ellipsoid tanpa kelim tambahan. Garis baju Piglet adalah torus parametrik, bukan quadric.
 
+Kurva lengan, senyum, dan alis Pooh menggunakan Bézier melalui `pooh/bezier.js`.
+Evaluasi memakai algoritma De Casteljau, lalu `tubeGeometry()` memberi ketebalan.
+Titik pertama dan terakhir menentukan ujung kurva; titik di antaranya mengatur lengkungan.
+Kurva Piglet dan Tigger tetap memakai implementasi Catmull–Rom yang sudah ada.
+
 `character-presentation.js` dipakai bersama ketiga halaman karakter.
 Tekan G, pilih primitive, lalu lihat jumlah mesh, bagian, rumus dan file sumber.
 Menutup panel mengembalikan material asli. Modul karakter tidak mengakses DOM.

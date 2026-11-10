@@ -60,6 +60,10 @@ export function setupCharacterPresentation(character) {
   const formula = document.querySelector('#geometry-formula');
   const buttons = [...panel.querySelectorAll('[data-primitive]')];
   const inventory = collectParts(character);
+  const curveTypes = new Set();
+  character.root.traverse(mesh => {
+    if (mesh.geometry?.type === 'curve') curveTypes.add(mesh.geometry.parameters.curve === 'bezier' ? 'Bézier' : 'Catmull–Rom');
+  });
   const originals = new Map();
   character.root.traverse(mesh => { if (mesh.geometry) originals.set(mesh, mesh.material); });
   const neutral = material({color: 0xb8b6ab, roughness: .85});
@@ -71,7 +75,7 @@ export function setupCharacterPresentation(character) {
     }
     buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.primitive === type)));
     const info = PRIMITIVES[type];
-    formula.textContent = info ? info.formula : 'WebGL murni · semua bentuk dibuat lewat kode';
+    formula.textContent = info ? type === 'curve' ? [...curveTypes].join(' / ') + ' → tubeGeometry()' : info.formula : 'WebGL murni · semua bentuk dibuat lewat kode';
     description.textContent = info ? describeParts(inventory, type) : 'Pilih primitive untuk menyorot bagian model. Warna abu-abu menunjukkan bagian lainnya. G menutup panel dan mengembalikan warna asli.';
   }
 

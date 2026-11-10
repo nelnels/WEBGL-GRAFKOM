@@ -81,7 +81,8 @@ Cylinder memakai radius atas sama dengan radius bawah.
 - `src/core/webgl.js`: `rotationAxis()` menghitung matriks Rodrigues; `Node.updateWorld()`
   menghitung `M_world_child = M_world_parent * M_local_child`.
 - `src/core/webgl.js`: fungsi tessellation sphere/ellipsoid, cylinder, parametric surface,
-  Catmull-Rom curve dan tube, serta torus.
+  kurva dan tube, serta torus. Pooh memakai Bézier di `src/characters/pooh/bezier.js`;
+  Piglet dan Tigger tetap memakai Catmull–Rom.
 - `src/geometry/primitives.js`: helper ellipsoid, cylinder, curve, dan elliptic paraboloid.
 - `src/characters/pooh/index.js`, `src/characters/piglet/index.js`, `src/characters/tigger/index.js`: geometri serta hierarchy masing-masing karakter.
 - `src/animation/character-transforms.js`: lima transformasi untuk karakter pada halaman aktif.
