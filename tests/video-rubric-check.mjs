@@ -4,7 +4,26 @@ import {createStory,STORY_DURATION} from '../src/animation/story.js';
 // Mengunci gerakan yang diperjelas untuk video; penilaian visual tetap lewat rekaman.
 const story=createStory(),tigger=story.characters[2];
 assert.equal(STORY_DURATION,68);
+const pooh=story.characters[0];
+story.update(11.1);const firstWriggle=pooh.root.axisAngle;
+assert(Math.abs(firstWriggle)>.08,'Pooh harus terlihat menggeliat saat tersangkut');
+assert(pooh.root.axis.toArray().every(v=>Math.abs(v)>.1),'sumbu Pooh harus diagonal');
+story.update(12.1);
+assert(firstWriggle*pooh.root.axisAngle<0,'Pooh harus menggeliat ke dua arah');
+const wriggleWorld=[...pooh.root.world];
+for(const t of [10,14,20]){story.update(t);assert.equal(Math.abs(pooh.root.axisAngle),0,'Pooh harus kembali tegak di luar gerakan menggeliat');}
+story.update(12.1);assert.deepEqual([...pooh.root.world],wriggleWorld,'gerakan Pooh harus seek-safe');
+const poohAxis=pooh.root.axis.toArray(),piglet=story.characters[1];
+story.update(22.2);const pigletAxis=piglet.root.axis.toArray(),pigletLean=piglet.root.axisAngle;
+assert(pigletLean>.08,'Piglet harus miring saat mencari tumpuan');
+assert(pigletAxis.every(v=>Math.abs(v)>.1),'sumbu Piglet harus diagonal');
+assert.notDeepEqual(pigletAxis,poohAxis,'arah diagonal Piglet dan Pooh harus berbeda');
+const pigletWorld=[...piglet.root.world];
+for(const t of [20,24,29]){story.update(t);assert.equal(Math.abs(piglet.root.axisAngle),0,'Piglet harus kembali tegak sebelum tarikan bersama');}
+story.update(22.2);assert.deepEqual([...piglet.root.world],pigletWorld,'kemiringan Piglet harus seek-safe');
 story.update(25.5);
+assert.notDeepEqual(tigger.root.axis.toArray(),poohAxis);
+assert.notDeepEqual(tigger.root.axis.toArray(),pigletAxis);
 assert(tigger.root.axisAngle>.4,'kedatangan harus memperlihatkan kemiringan yang cukup besar');
 assert(tigger.root.axis.toArray().every(v=>Math.abs(v)>.1),'sumbu miring harus memiliki tiga komponen');
 story.update(61.5);const compressed=tigger.root.scale.y;

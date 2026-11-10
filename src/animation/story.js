@@ -72,6 +72,9 @@ export function createStory(){
    c.parts.arms.forEach((arm,j)=>arm.rotation.set((j?1:-1)*Math.sin(t*6)*.14*walk,0,0));
    // 3a. Pooh: makan, terjepit, menahan tarikan, lalu kembali meraih madu.
    if(i===0){
+    // Menggeliat diagonal saat tersangkut, lalu kembali tegak sebelum dibantu.
+    c.root.axis.set(1,.5,.25).normalize();
+    c.root.axisAngle=.12*Math.sin(t*3)*pulse(t,10.5,14);
     const squeeze=.15*pulse(t,47.7,49.6);
     c.root.scale.x*=1-squeeze;c.root.scale.y*=1+squeeze*.35;
     const stuck=pulse(t,10,48),strain=pulling*.15;
@@ -90,6 +93,9 @@ export function createStory(){
    }
    // 3b. Piglet: mendekat, memegang tangan Pooh, dan menarik dengan badan/kaki.
    if(i===1){
+    // Satu kemiringan singkat untuk mencari tumpuan, berbeda dari geliatan Pooh.
+    c.root.axis.set(.5,1,-.5).normalize();
+    c.root.axisAngle=.10*pulse(t,21,24);
     c.root.position.set(mix(2.2,-.25,blend(t,14,19))+released*2.2,0,.05);
     c.parts.head.rotation.y=.45*pulse(t,14,17);
     const grip=blend(t,19,21)*(1-blend(t,48.8,50));
