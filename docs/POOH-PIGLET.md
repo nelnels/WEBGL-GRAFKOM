@@ -16,8 +16,9 @@ Masing-masing folder `src/characters/pooh/` dan `src/characters/piglet/` berisi:
 `CYLINDER`, `CURVE`, serta `SOURCE` untuk nama mesh dan file pembangunnya.
 Helper memakai implementasi prosedural di `geometry/primitives.js`.
 Telinga Piglet mempertahankan tessellation 24 × 48 dan pusat y = 0.55.
-Moncong Pooh adalah elliptic paraboloid. Baju Pooh memakai potongan permukaan
-ellipsoid tanpa kelim tambahan. Garis baju Piglet adalah torus parametrik, bukan quadric.
+Moncong Pooh adalah elliptic paraboloid. Baju Pooh memakai ellipsoid utuh berwarna
+merah, ditumpuk dengan perut kuning tanpa pemotongan sudut atau kelim tambahan.
+Garis baju Piglet adalah torus parametrik, bukan quadric.
 
 Kurva lengan, senyum, dan alis Pooh menggunakan Bézier melalui `pooh/bezier.js`.
 Evaluasi memakai algoritma De Casteljau, lalu `tubeGeometry()` memberi ketebalan.
