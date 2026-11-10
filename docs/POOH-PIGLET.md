@@ -7,7 +7,7 @@ Masing-masing folder `src/characters/pooh/` dan `src/characters/piglet/` berisi:
 | --- | --- |
 | `index.js` | Factory karakter, root/body, perakitan, parts, view, dan update animasi |
 | `materials.js` | Warna dan properti material |
-| `torso.js` | Badan, pakaian, kelim atau garis baju, serta leher Piglet |
+| `torso.js` | Badan, pakaian, garis baju dan leher Piglet |
 | `head.js` | Kepala, moncong, mata, hidung, alis, dan senyum |
 | `ears.js` | Telinga; ellipsoid Pooh dan elliptic paraboloid Piglet |
 | `limbs.js` | Lengan, tangan, kaki, dan pivot anggota tubuh |
@@ -16,8 +16,8 @@ Masing-masing folder `src/characters/pooh/` dan `src/characters/piglet/` berisi:
 `CYLINDER`, `CURVE`, serta `SOURCE` untuk nama mesh dan file pembangunnya.
 Helper memakai implementasi prosedural di `geometry/primitives.js`.
 Telinga Piglet mempertahankan tessellation 24 × 48 dan pusat y = 0.55.
-Moncong Pooh adalah elliptic paraboloid; garis baju Piglet dan kelim Pooh
-adalah torus parametrik, bukan quadric.
+Moncong Pooh adalah elliptic paraboloid. Baju Pooh memakai potongan permukaan
+ellipsoid tanpa kelim tambahan. Garis baju Piglet adalah torus parametrik, bukan quadric.
 
 `character-presentation.js` dipakai bersama ketiga halaman karakter.
 Tekan G, pilih primitive, lalu lihat jumlah mesh, bagian, rumus dan file sumber.
