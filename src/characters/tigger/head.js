@@ -27,9 +27,9 @@ export function buildHead(parent,helpers,materials) {
   ELLIPSOID(head,'hidung',[0,.10,.96],[.26,.17,.15],nose);
   for(const side of [-1,1]) {
     const tag=side<0?'kiri':'kanan';
-    ELLIPSOID(head,`kelopak-mata-${tag}`,[side*.18,.30,.47],[.19,.29,.10],white);
-    ELLIPSOID(head,`mata-${tag}`,[side*.16,.31,.565],[.048,.085,.035],black);
-    ELLIPSOID(head,`pipi-${tag}`,[side*.26,-.02,.70],[.34,.28,.27],cream);
+    // ELLIPSOID(head,`kelopak-mata-${tag}`,[side*.18,.30,.47],[.19,.29,.10],white);
+    // ELLIPSOID(head,`mata-${tag}`,[side*.16,.31,.565],[.048,.085,.035],black);
+    // ELLIPSOID(head,`pipi-${tag}`,[side*.26,-.02,.70],[.34,.28,.27],cream);
 
     buildEars(head,{...helpers,side,tag},materials);
 

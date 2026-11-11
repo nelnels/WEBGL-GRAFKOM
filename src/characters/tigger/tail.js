@@ -1,14 +1,16 @@
 import {Node,Mesh,Vec3,tubeGeometry} from '../../core/webgl.js';
 import {BezierCurve} from '../../geometry/bezier.js';
 
-// [TIGGER - 3D CURVE] Setiap ruas memakai Bézier kubik dengan tangent lintasan lama.
+// [TIGGER - 3D CURVE] Bezier
 function createTailPath(points) {
   const curves=points.slice(0,-1).map((start,i)=>{
     const previous=points[Math.max(0,i-1)];
     const end=points[i+1];
     const next=points[Math.min(points.length-1,i+2)];
+    // TITIK KONTROL TENGAH: handleOut dan handleIn mengatur lengkungan.
     const handleOut=end.clone().sub(previous).multiplyScalar(1/6).add(start);
     const handleIn=end.clone().sub(next.clone().sub(start).multiplyScalar(1/6));
+    // SATU RUAS BÉZIER: 4 titik kontrol, dari start ke end.
     return new BezierCurve([start,handleOut,handleIn,end]);
   });
   return {
@@ -31,6 +33,7 @@ export function buildTail(parent,helpers,materials) {
     new Vec3(-1.55,.16,.02),new Vec3(-1.91,-.20,.06),new Vec3(-2.12,.02,.10),new Vec3(-2.04,.45,.10)
   ]);
   const segments=112,radial=12;
+  // VOLUME: tubeGeometry menyambung cincin radius 0.16 di sepanjang kurva.
   const tailGeometry=tubeGeometry(path,segments,.16,radial); tailGeometry.clearGroups();
   tailGeometry.parameters.curve='bezier';
   for(let i=0;i<segments;i++) tailGeometry.addGroup(i*radial*6,radial*6,i>=segments-13||Math.floor(i/7)%2===1?1:0);
