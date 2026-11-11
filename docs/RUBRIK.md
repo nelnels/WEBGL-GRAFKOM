@@ -82,7 +82,7 @@ Cylinder memakai radius atas sama dengan radius bawah.
   menghitung `M_world_child = M_world_parent * M_local_child`.
 - `src/core/webgl.js`: fungsi tessellation sphere/ellipsoid, cylinder, parametric surface,
   kurva dan tube, serta torus. Pooh dan Piglet memakai Bézier di
-  `src/geometry/bezier.js`; Tigger tetap memakai Catmull–Rom.
+  `src/geometry/bezier.js`; ekor Tigger memakai enam ruas Bézier kubik dan wajahnya memakai Catmull–Rom.
 - `src/geometry/primitives.js`: helper ellipsoid, cylinder, curve, dan elliptic paraboloid.
 - `src/characters/pooh/index.js`, `src/characters/piglet/index.js`, `src/characters/tigger/index.js`: geometri serta hierarchy masing-masing karakter.
 - `src/animation/character-transforms.js`: lima transformasi untuk karakter pada halaman aktif.

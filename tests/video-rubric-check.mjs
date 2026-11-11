@@ -19,6 +19,12 @@ assert(pigletLean>.08,'Piglet harus miring saat mencari tumpuan');
 assert(pigletAxis.every(v=>Math.abs(v)>.1),'sumbu Piglet harus diagonal');
 assert.notDeepEqual(pigletAxis,poohAxis,'arah diagonal Piglet dan Pooh harus berbeda');
 const pigletWorld=[...piglet.root.world];
+story.update(29);const pigletRest=piglet.root.scale.clone();
+story.update(34);assert(piglet.root.scale.y/pigletRest.y<.9,'Piglet squash terbaca pada tarikan pertama');
+story.update(47);
+assert(piglet.root.scale.y/pigletRest.y<.85,'tarikan kedua memberi squash lebih kuat');
+assert(piglet.root.scale.x>pigletRest.x&&piglet.root.scale.z>pigletRest.z,'squash sedikit melebarkan X/Z');
+story.update(49);assert.deepEqual(piglet.root.scale.toArray(),pigletRest.toArray(),'skala Piglet kembali setelah tarikan');
 for(const t of [20,24,29]){story.update(t);assert.equal(Math.abs(piglet.root.axisAngle),0,'Piglet harus kembali tegak sebelum tarikan bersama');}
 story.update(22.2);assert.deepEqual([...piglet.root.world],pigletWorld,'kemiringan Piglet harus seek-safe');
 story.update(25.5);

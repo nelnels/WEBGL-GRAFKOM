@@ -25,7 +25,10 @@ Tetap WebGL murni; bentuk dan struktur modul karakter dipertahankan.
    samping karena bentuk badannya memanjang. Bangun juga diberi selisih waktu.
 5. **Grounding.** Posisi Y root disesuaikan dengan titik mesh terendah setelah
    transformasi. Ini mencegah kaki/badan menembus tanah, tanpa simulasi fisika.
-6. **Scaling.** Tigger sedikit merendah saat bersiap. Pooh menyempit sebentar
+6. **Scaling.** Piglet merendah mengikuti tenaga tarikan pada 30.5–38.5 dan 40.5–48.5
+   detik: Y berkurang hingga 18%, X/Z bertambah hingga 6.3%, lalu kembali normal.
+   Tinggi bahu dikompensasi agar tangan tetap berpegangan dan kaki tetap di lantai.
+   Tigger sedikit merendah saat bersiap. Pooh menyempit sebentar
    ketika lepas dari pintu. Transformasi induk membawa semua bagian tubuh.
 7. **Kamera.** Target, yaw dan ukuran framing diinterpolasi dari pembuka di dalam
    rumah menuju sisi luar. Kamera melebar sebelum jatuh, lalu mendekat sedikit

@@ -13,7 +13,7 @@ Penataan file mempertahankan geometri, warna, urutan mesh, hierarki, view, dan a
 | `src/characters/tigger/head.js` | `buildHead(parent, helpers, materials)`: kepala, wajah, mata, hidung, mulut, alis, kumis, belang kepala | Ellipsoid, curve, surface bebas |
 | `src/characters/tigger/ears.js` | `buildEars(parent, helpers, materials)`: telinga luar/dalam, sisi depan/belakang | Elliptic paraboloid |
 | `src/characters/tigger/limbs.js` | `buildLimbs(parent, helpers, materials)`: bahu, siku, lengan, pinggul, lutut, kaki dan belang cincin | Cylinder, ellipsoid, surface bebas |
-| `src/characters/tigger/tail.js` | `buildTail(parent, helpers, materials)`: ekor dan ujungnya | Catmull-Rom → tube; ellipsoid |
+| `src/characters/tigger/tail.js` | `buildTail(parent, helpers, materials)`: ekor dan ujungnya | Enam ruas Bézier kubik → tube; ellipsoid |
 | `src/geometry/quadrics.js` | `ELLIPSOID`, `ELLIPTIC_PARABOLOID`, `CYLINDER`, `CURVE`: pembungkus primitive dan penamaan mesh | Empat helper bernama sesuai jenis |
 | `src/geometry/primitives.js` | `egg`, `paraboloid`, `armSegment`, `line`: implementasi helper yang dibungkus | Primitive dasar yang tetap digunakan |
 | `src/character-presentation.js` | `setupCharacterPresentation`, `collectParts`, `describeParts`: panel sorot dan daftar bagian | Pembacaan metadata mesh; penggantian material saja |

@@ -22,7 +22,10 @@ const piglet=createPiglet(),pigletCurves=[];
 piglet.root.traverse(m=>{if(m.geometry?.type==='curve')pigletCurves.push(m);});
 assert.equal(pigletCurves.length,5,'Piglet keeps two eyebrows, a smile and two ear folds');
 assert(pigletCurves.every(m=>m.geometry.parameters.curve==='bezier'),'Piglet face and ear curves use Bezier evaluation');
-for(const character of [createTigger(primitives)]){
-  character.root.traverse(m=>{if(m.geometry?.type==='curve')assert.notEqual(m.geometry.parameters.curve,'bezier','Other characters retain their existing curves');});
-}
-console.log('Pooh Bezier: curve inventory, endpoints, quadratic midpoint, finite tubes and isolated character scope passed.');
+const tigger=createTigger(primitives);
+const tail=tigger.root.getObjectByName('Tigger-curve-ekor');
+assert.equal(tail.geometry.parameters.curve,'bezier');
+tigger.parts.head.traverse(m=>{
+  if(m.geometry?.type==='curve')assert.notEqual(m.geometry.parameters.curve,'bezier');
+});
+console.log('Bezier: Pooh and Piglet curves, Tigger tail, endpoints and control point evaluation passed.');
