@@ -24,7 +24,7 @@ export function multiply(a,b){
 }
 export function translation(x,y,z){const m=identity();m[12]=x;m[13]=y;m[14]=z;return m;}
 export function scaling(x,y,z){const m=identity();m[0]=x;m[5]=y;m[10]=z;return m;}
-// Rumus Rodrigues: rotasi terhadap sembarang vektor sumbu yang dinormalisasi.
+// [TIGGER - ARBITRARY AXIS ROTATION]
 export function rotationAxis(axis,angle){
   const {x,y,z}=axis.clone().normalize(),c=Math.cos(angle),s=Math.sin(angle),t=1-c;
   return new Float32Array([
@@ -66,13 +66,16 @@ export class Node {
     this.world=identity();
   }
   add(child){if(child.parent)child.parent.children=child.parent.children.filter(n=>n!==child);child.parent=this;this.children.push(child);return this;}
+  // [TIGGER - ARBITRARY AXIS ROTATION]
   localMatrix(){
     let m=translation(...this.position.toArray());
     for(const [axis,angle]of [[X,this.rotation.x],[Y,this.rotation.y],[Z,this.rotation.z]])m=multiply(m,rotationAxis(axis,angle));
     m=multiply(m,this.orientation);m=multiply(m,rotationAxis(this.axis,this.axisAngle));
     return multiply(m,scaling(...this.scale.toArray()));
   }
+  
   // Hierarki nyata: M_world_child = M_world_parent * M_local_child.
+  // [TIGGER - HIERARCHICAL TRANSFORMATION] 
   updateWorld(parent=identity()){this.world=multiply(parent,this.localMatrix());for(const child of this.children)child.updateWorld(this.world);}
   traverse(fn){fn(this);for(const child of this.children)child.traverse(fn);}
   getObjectByName(name){if(this.name===name)return this;for(const child of this.children){const found=child.getObjectByName(name);if(found)return found;}return null;}
@@ -130,9 +133,10 @@ export function diskGeometry(radius=1,segments=64){
   for(let i=0;i<segments;i++)idx.push(0,i+1,i+2);
   return geometry(p,n,idx,'disk');
 }
-// Interpolasi Catmull-Rom 3D dihitung sendiri, lalu diekstrusi menjadi tube.
+// Interpolasi Catmull-Rom 3D
 export class CatmullRomCurve {
   constructor(points){this.points=points.map(p=>p.clone());}
+  // [TIGGER - 3D CURVE]
   getPoint(t){
     const count=this.points.length,f=Math.max(0,Math.min(1,t))*(count-1),i=Math.min(count-2,Math.floor(f)),u=f-i;
     const p0=this.points[Math.max(0,i-1)],p1=this.points[i],p2=this.points[i+1],p3=this.points[Math.min(count-1,i+2)];
@@ -141,6 +145,7 @@ export class CatmullRomCurve {
     return result;
   }
 }
+// [TIGGER - 3D CURVE]
 export function tubeGeometry(curve,segments=48,radius=.03,radial=10){
   const p=[],n=[],idx=[];let prior=null;
   for(let i=0;i<=segments;i++){

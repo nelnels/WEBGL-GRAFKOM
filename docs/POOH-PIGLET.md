@@ -23,7 +23,7 @@ Garis baju Piglet adalah torus parametrik, bukan quadric.
 Kurva lengan, senyum, dan alis Pooh menggunakan Bézier melalui `pooh/bezier.js`.
 Evaluasi memakai algoritma De Casteljau, lalu `tubeGeometry()` memberi ketebalan.
 Titik pertama dan terakhir menentukan ujung kurva; titik di antaranya mengatur lengkungan.
-Kurva Piglet dan Tigger tetap memakai implementasi Catmull–Rom yang sudah ada.
+Kurva Piglet dan wajah Tigger memakai Catmull–Rom. Ekor Tigger memakai enam ruas Bézier kubik.
 
 `character-presentation.js` dipakai bersama ketiga halaman karakter.
 Tekan G, pilih primitive, lalu lihat jumlah mesh, bagian, rumus dan file sumber.

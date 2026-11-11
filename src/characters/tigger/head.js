@@ -1,20 +1,18 @@
-/*
- * Kepala dan wajah: ellipsoid, x²/a²+y²/b²+z²/c²=1.
- * Belang: surface parametrik di atas bola satuan.
- * Alis, kumis dan garis mulut: kurva Catmull-Rom P(t), diekstrusi menjadi tube.
- * Telinga dirakit oleh ears.js pada urutan penambahan node yang sama.
- */
 import {Node} from '../../core/webgl.js';
 import {buildEars} from './ears.js';
 export function buildHead(parent,helpers,materials) {
   const body=parent;
   const {ELLIPSOID,STRIPE,CURVE,onUnit,mix,SOURCE}=helpers;
   const {orange,cream,white,nose,mouth,tongue,black,whisker}=materials;
+  //Root -> Head
+  // [TIGGER - HIERARCHICAL TRANSFORMATION] Body → Head
   const head=new Node(); head.name='Tigger-head'; head.position.set(1.20,.92,.06);
+  // [TIGGER - SCALING] 
   head.scale.setScalar(.88); body.add(head);
+
   const skull=ELLIPSOID(head,'tengkorak',[0,.06,0],[.63,.82,.55],orange);
 
-  // Belang kepala (SURFACE) pada ellipsoid tengkorak: tiga di dahi, tiga di tiap pelipis.
+  // Belang kepala (SURFACE) pada ellipsoid tengkorak
   [[0,0],[.40,-.14],[-.40,.14]].forEach(([az0,slant],i)=>STRIPE(skull,`belang-dahi-${i}`,(s,c,p)=>{
     onUnit(mix(.16,.95,s),az0+slant*s+c*.13,p);
   }));
@@ -22,7 +20,7 @@ export function buildHead(parent,helpers,materials) {
     onUnit(theta-.12*s+c*.11,side*mix(1.95,1.05,s),p);
   }));
 
-  // Wajah krem (ELLIPSOID): dagu panjang, pipi, kelopak mata, hidung, mulut, lidah.
+  // Wajah krem (ELLIPSOID): dagu , pipi, kelopak mata, hidung, mulut, lidah.
   ELLIPSOID(head,'dagu',[0,-.36,.28],[.52,.72,.42],cream);
   ELLIPSOID(head,'mulut',[0,-.40,.755],[.29,.38,.07],mouth);
   ELLIPSOID(head,'lidah',[0,-.58,.80],[.16,.10,.04],tongue);
@@ -35,6 +33,7 @@ export function buildHead(parent,helpers,materials) {
 
     buildEars(head,{...helpers,side,tag},materials);
 
+    // [TIGGER - 3D CURVE] Alis/ kumis memakai titik kontrol lokal Head
     // Alis dan kumis (CURVE).
     CURVE(head,`alis-${tag}`,[[side*.07,.60,.46],[side*.20,.66,.44],[side*.30,.60,.43]],.023,black);
     for(const j of [-1,0,1]) CURVE(head,`kumis-${tag}-${j+1}`,[[side*.34,-.05+j*.06,.82],[side*.59,.01+j*.11,.82],[side*.79,.03+j*.15,.77]],.009,whisker);

@@ -39,26 +39,36 @@ export function createTigger(primitives) {
   helpers.ELLIPSOID_BAND=(mesh,part,theta,arc,thickness)=>SURFACE(mesh,part,(u,v,p)=>{
     helpers.onUnit(theta-(v-.5)*thickness*Math.sin(Math.PI*u),mix(arc[0],arc[1],u),p,1.018);
   },28,8,ink);
+
+  //Root
+  // [TIGGER - HIERARCHICAL TRANSFORMATION] Root → Body → kepala, bahu, pinggul dan ekor.
   const root=new Node(); root.name='Tigger';
+  //Body
   const body=new Node(); body.name='Tigger-body'; root.add(body);
   buildTorso(body,helpers,materials);
   const head=buildHead(body,helpers,materials);
   const {arms,elbows,legs,knees}=buildLimbs(body,helpers,materials);
   const tail=buildTail(body,helpers,materials);
+
   return {
     root,
     body,
     parts:{head,arms,legs},
     view: {target:[-.35,.5,0],height:6.2,halfWidth:3.5},
+    // [TIGGER - DEMO] 
     update(t) {
       const phase=t*2.3,lift=Math.max(0,Math.sin(phase)),swing=Math.sin(phase+.4);
+      // [TIGGER - TRANSLATION] Body 
       body.position.set(-lift*.08,.22+lift*.64,0);
+      // [TIGGER - ROTATION] Body
       body.rotation.set(0,.06,-.025+Math.sin(phase)*.025);
       head.rotation.set(0,-.18+Math.sin(t*.8)*.05,-.13);
+      // [TIGGER - ROTATION] Bahu, siku, pinggul, lutut berayun di Z 
       arms[0].rotation.z=-.08+swing*.13+lift*.42; arms[1].rotation.z=.10-swing*.13+lift*.26;
       elbows[0].rotation.z=-.10-lift*.40; elbows[1].rotation.z=.10-lift*.32;
       legs[0].rotation.z=-.08-lift*.46; legs[1].rotation.z=.12-lift*.30;
       knees[0].rotation.z=.18+lift*.48; knees[1].rotation.z=-.12+lift*.40;
+      // [TIGGER - ROTATION - EKOR] Y
       tail.rotation.y=Math.sin(phase-.6)*.13;
       tail.rotation.z=Math.sin(phase-.8)*.10;
     }

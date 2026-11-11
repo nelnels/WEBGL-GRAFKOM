@@ -13,6 +13,7 @@ async function start(){
   const choices={
     pooh:{file:'pooh/index.js',factory:'createPooh',position:[0,0,0]},
     piglet:{file:'piglet/index.js',factory:'createPiglet',position:[0,-.55,0]},
+    // [TIGGER - DEMO]
     tigger:{file:'tigger/index.js',factory:'createTigger',position:[.35,.25,0]}
   };
   const selected=choices[id];if(!selected)throw new Error('Karakter tidak dikenal.');
@@ -36,6 +37,7 @@ async function start(){
     if(!lost){
       const ratio=Math.min(devicePixelRatio||1,2),width=Math.max(1,Math.floor(canvas.clientWidth*ratio)),height=Math.max(1,Math.floor(canvas.clientHeight*ratio));
       if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;}
+      // [TIGGER - DEMO] 
       character.update(time);motion.update(time,delta,controls.state.mode,controls.update(time));
       camera.update(delta);renderer.render(scene,camera);
       canvas.dataset.mode=controls.state.mode||'normal';

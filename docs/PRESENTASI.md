@@ -30,7 +30,7 @@
 
 - **Ellipsoid:** `x²/a² + y²/b² + z²/c² = 1`. Bola satuan diskalakan sepanjang tiga sumbu. Sphere dan ellipsoid dianggap satu jenis pada rubrik.
 - **Elliptic paraboloid:** `z = d(1 − x²/a² − y²/b²)`. Telinga Tigger adalah bukti quadric selain ellipsoid dan cylinder. Badan/perut Tigger berupa surface loft bebas; jangan menyebutnya ellipsoid atau bukti quadric tambahan.
-- **Curve 3D:** titik kontrol Catmull–Rom membentuk lintasan; `tubeGeometry()` memberikan penampang sehingga menjadi mesh 3D. Tunjukkan curve pada karakter, bukan hanya tanaman atau properti.
+- **Curve 3D:** ekor Tigger memakai enam ruas Bézier kubik. Dua titik kontrol di tiap ruas mempertahankan tangent lintasan lama. `tubeGeometry()` memberikan penampang sehingga lintasan menjadi mesh 3D.
 - **Hierarki:** `M_dunia_anak = M_dunia_induk × M_lokal_anak`. Gerakan badan membawa kepala dan anggota tubuh; pivot siku Tigger membawa bagian lengan di bawahnya.
 
 Helper Tigger (`quadrics.js`) meneruskan pemanggilan ke `createCharacterHelpers()`, yang juga dipakai Pooh/Piglet. Seluruh helper akhirnya memakai `primitives.js`. Pembungkus mempertahankan API Tigger sambil menyatukan aturan penamaan dan perhitungan primitive; metadata sumber ditambahkan saat perakitan karakter.

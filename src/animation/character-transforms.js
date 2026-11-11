@@ -24,10 +24,15 @@ export function createCharacterTransforms({root,body,groundY=-2.25,phase=0}){
     for(const i of indices){points[j++]=p[i];points[j++]=p[i+1];points[j++]=p[i+2];}
     return {mesh,points,sphereRadius:mesh.geometry.type==='ellipsoid'?radius:0};
   });
+
+
   const state={lift:0,yaw:0,scale:1,axis:0,hierarchy:0};
   return {root,body,groundSamples,update(t,delta,mode=null,demoTime=0){
+
     const wave=Math.sin(t*1.1+phase);
+    //translasi Y
     const desired={lift:.025*(1+wave),yaw:.018*Math.sin(t*.65+phase),scale:1+.006*wave,axis:.006*Math.sin(t*.85+phase),hierarchy:0};
+
     if(mode){
       desired.lift=0;desired.yaw=0;desired.scale=1;desired.axis=0;
       const u=Math.sin(demoTime*1.6);
@@ -39,6 +44,7 @@ export function createCharacterTransforms({root,body,groundY=-2.25,phase=0}){
     }
     const blend=1-Math.exp(-7*Math.min(.1,Math.max(0,delta)));
     for(const k of Object.keys(state))state[k]+=(desired[k]-state[k])*blend;
+    
     root.position.copy(base);root.position.y=groundY+(base.y-groundY)*state.scale+state.lift;
     root.scale.copy(size).multiplyScalar(state.scale);
     root.rotation.y=state.yaw;root.axis.copy(ARBITRARY_AXIS);root.axisAngle=state.axis;

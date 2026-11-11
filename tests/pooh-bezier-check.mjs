@@ -18,7 +18,13 @@ assert.deepEqual(control[1].toArray(),[1,2,1],'Evaluation must not mutate the co
 for(const m of curves){
   assert([...m.geometry.positions,...m.geometry.normals].every(Number.isFinite),'Bezier tubes need finite vertices and normals');
 }
-for(const character of [createPiglet(),createTigger(primitives)]){
-  character.root.traverse(m=>{if(m.geometry?.type==='curve')assert.notEqual(m.geometry.parameters.curve,'bezier','Other characters retain their existing curves');});
-}
-console.log('Pooh Bezier: curve inventory, endpoints, quadratic midpoint, finite tubes and isolated character scope passed.');
+createPiglet().root.traverse(m=>{
+  if(m.geometry?.type==='curve')assert.notEqual(m.geometry.parameters.curve,'bezier');
+});
+const tigger=createTigger(primitives);
+const tail=tigger.root.getObjectByName('Tigger-curve-ekor');
+assert.equal(tail.geometry.parameters.curve,'bezier');
+tigger.parts.head.traverse(m=>{
+  if(m.geometry?.type==='curve')assert.notEqual(m.geometry.parameters.curve,'bezier');
+});
+console.log('Bezier: Pooh curves and Tigger tail passed. Piglet and Tigger face curves retain Catmull–Rom.');
