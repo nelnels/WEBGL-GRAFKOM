@@ -9,7 +9,7 @@ const pooh=createPooh(),curves=[];
 pooh.root.traverse(m=>{if(m.geometry?.type==='curve')curves.push(m);});
 assert.equal(curves.length,5,'Pooh keeps its two arms, two eyebrows and smile');
 assert(curves.every(m=>m.geometry.parameters.curve==='bezier'),'All five Pooh curves must use Bezier evaluation');
-const {BezierCurve}=await import('../src/characters/pooh/bezier.js');
+const {BezierCurve}=await import('../src/geometry/bezier.js');
 const control=[new Vec3(0,0,0),new Vec3(1,2,1),new Vec3(2,0,0)],curve=new BezierCurve(control);
 assert.deepEqual(curve.getPoint(0).toArray(),[0,0,0]);
 assert.deepEqual(curve.getPoint(1).toArray(),[2,0,0]);
@@ -18,7 +18,11 @@ assert.deepEqual(control[1].toArray(),[1,2,1],'Evaluation must not mutate the co
 for(const m of curves){
   assert([...m.geometry.positions,...m.geometry.normals].every(Number.isFinite),'Bezier tubes need finite vertices and normals');
 }
-for(const character of [createPiglet(),createTigger(primitives)]){
+const piglet=createPiglet(),pigletCurves=[];
+piglet.root.traverse(m=>{if(m.geometry?.type==='curve')pigletCurves.push(m);});
+assert.equal(pigletCurves.length,5,'Piglet keeps two eyebrows, a smile and two ear folds');
+assert(pigletCurves.every(m=>m.geometry.parameters.curve==='bezier'),'Piglet face and ear curves use Bezier evaluation');
+for(const character of [createTigger(primitives)]){
   character.root.traverse(m=>{if(m.geometry?.type==='curve')assert.notEqual(m.geometry.parameters.curve,'bezier','Other characters retain their existing curves');});
 }
 console.log('Pooh Bezier: curve inventory, endpoints, quadratic midpoint, finite tubes and isolated character scope passed.');

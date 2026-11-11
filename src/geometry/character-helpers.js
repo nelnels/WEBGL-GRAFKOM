@@ -1,4 +1,5 @@
 import * as primitives from './primitives.js';
+import {bezierLine} from './bezier.js';
 
 // Primitive bernama untuk ketiga karakter; geometri tetap dibuat di primitives.js.
 export function createCharacterHelpers(character, helpers=primitives) {
@@ -8,6 +9,7 @@ export function createCharacterHelpers(character, helpers=primitives) {
     ELLIPTIC_PARABOLOID:(parent,part,position,a,b,depth,mat)=>named(helpers.paraboloid(parent,position,a,b,depth,mat),'paraboloid',part),
     CYLINDER:(parent,part,a,b,radius,mat)=>named(helpers.armSegment(parent,a,b,radius,mat),'cylinder',part),
     CURVE:(parent,part,points,radius,mat)=>named(helpers.line(parent,points,radius,mat),'curve',part),
+    BEZIER:(parent,part,points,radius,mat)=>named(bezierLine(parent,points,radius,mat),'curve',part),
     SOURCE(parent,url) {
       const file=new URL(url).pathname.split('/').pop();
       let index=0;

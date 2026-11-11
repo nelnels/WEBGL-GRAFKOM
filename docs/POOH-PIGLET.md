@@ -13,17 +13,18 @@ Masing-masing folder `src/characters/pooh/` dan `src/characters/piglet/` berisi:
 | `limbs.js` | Lengan, tangan, kaki, dan pivot anggota tubuh |
 
 `geometry/character-helpers.js` menyediakan `ELLIPSOID`, `ELLIPTIC_PARABOLOID`,
-`CYLINDER`, `CURVE`, serta `SOURCE` untuk nama mesh dan file pembangunnya.
+`CYLINDER`, `CURVE`, `BEZIER`, serta `SOURCE` untuk nama mesh dan file pembangunnya.
 Helper memakai implementasi prosedural di `geometry/primitives.js`.
 Telinga Piglet mempertahankan tessellation 24 × 48 dan pusat y = 0.55.
 Moncong Pooh adalah elliptic paraboloid. Baju Pooh memakai ellipsoid utuh berwarna
 merah, ditumpuk dengan perut kuning tanpa pemotongan sudut atau kelim tambahan.
 Garis baju Piglet adalah torus parametrik, bukan quadric.
 
-Kurva lengan, senyum, dan alis Pooh menggunakan Bézier melalui `pooh/bezier.js`.
-Evaluasi memakai algoritma De Casteljau, lalu `tubeGeometry()` memberi ketebalan.
-Titik pertama dan terakhir menentukan ujung kurva; titik di antaranya mengatur lengkungan.
-Kurva Piglet dan Tigger tetap memakai implementasi Catmull–Rom yang sudah ada.
+Kurva lengan, senyum, dan alis Pooh serta kurva senyum, alis, dan lipatan telinga
+Piglet menggunakan Bézier melalui `geometry/bezier.js`. Evaluasi memakai algoritma
+De Casteljau, lalu `tubeGeometry()` memberi ketebalan. Titik pertama dan terakhir
+menentukan ujung kurva; titik di antaranya mengatur lengkungan. Tigger tetap memakai
+implementasi Catmull–Rom yang sudah ada.
 
 `character-presentation.js` dipakai bersama ketiga halaman karakter.
 Tekan G, pilih primitive, lalu lihat jumlah mesh, bagian, rumus dan file sumber.

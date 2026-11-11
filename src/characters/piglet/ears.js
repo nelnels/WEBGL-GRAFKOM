@@ -1,7 +1,7 @@
 import {Node,Mesh,parametric} from '../../core/webgl.js';
 
 export function buildEars(parent,helpers,materials) {
-  const {CURVE,SOURCE}=helpers;
+  const {BEZIER,SOURCE}=helpers;
   const {skin,innerEar,noseMaterial}=materials;
   const head=parent;
   function ear(side) {
@@ -19,7 +19,7 @@ export function buildEars(parent,helpers,materials) {
     const inset = new Mesh(geometry,innerEar); inset.scale.set(.72,.79,.85);
     inset.name=`Piglet-paraboloid-telinga-dalam-${side}`;
     inset.position.set(0,.09,.047); group.add(inset);
-    CURVE(group,'lipatan-telinga',[[side*.07,.16,.18],[side*.11,.48,.23],[side*.04,.82,.18]],.013,noseMaterial);
+    BEZIER(group,'lipatan-telinga',[[side*.07,.16,.18],[side*.11,.50,.27],[side*.04,.82,.18]],.013,noseMaterial);
     group.rotation.z=-side*.9; group.rotation.x=-.24;
     return group;
   }

@@ -20,7 +20,7 @@
 | Estetika dan satu environment | Rumah, kaca, halaman, langit, pohon dan tiga karakter | `src/scene/doorway-set.js`: `createDoorwaySet()`, `buildHouse()`, `buildSky()`, `buildTrees()`, `buildGarden()` |
 | Translate | Berjalan ke pintu, penolong mendekat; tombol T | `src/animation/story.js`: `pose()` dalam `createStory()`; `character-transforms.js`: `createCharacterTransforms()` |
 | Rotate | Kepala, lengan dan badan bergerak; tombol R | `story.js`: `pose()`; `character-transforms.js`: mode `rotate` |
-| Scaling | Pooh menyempit saat lepas, Tigger merendah; tombol S | `story.js`: `squeeze`, `crouch`; `character-transforms.js`: mode `scale` |
+| Scaling | Piglet merendah saat menarik, Pooh menyempit saat lepas, Tigger merendah; tombol S | `story.js`: `pigletSquash`, `squeeze`, `crouch`; `character-transforms.js`: mode `scale` |
 | Rotate Arbitrary Axis | Tigger miring saat tarikan, karakter jatuh; tombol A | `story.js`: `axis`, `axisAngle`; `src/core/webgl.js`: `rotationAxis()` |
 | Hierarchical Transformation | Tangan mengikuti lengan/badan; tombol H | `src/core/webgl.js`: `Node.localMatrix()`, `Node.updateWorld()`; modul `limbs.js` karakter |
 

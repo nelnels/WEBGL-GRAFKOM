@@ -81,8 +81,8 @@ Cylinder memakai radius atas sama dengan radius bawah.
 - `src/core/webgl.js`: `rotationAxis()` menghitung matriks Rodrigues; `Node.updateWorld()`
   menghitung `M_world_child = M_world_parent * M_local_child`.
 - `src/core/webgl.js`: fungsi tessellation sphere/ellipsoid, cylinder, parametric surface,
-  kurva dan tube, serta torus. Pooh memakai Bézier di `src/characters/pooh/bezier.js`;
-  Piglet dan Tigger tetap memakai Catmull–Rom.
+  kurva dan tube, serta torus. Pooh dan Piglet memakai Bézier di
+  `src/geometry/bezier.js`; Tigger tetap memakai Catmull–Rom.
 - `src/geometry/primitives.js`: helper ellipsoid, cylinder, curve, dan elliptic paraboloid.
 - `src/characters/pooh/index.js`, `src/characters/piglet/index.js`, `src/characters/tigger/index.js`: geometri serta hierarchy masing-masing karakter.
 - `src/animation/character-transforms.js`: lima transformasi untuk karakter pada halaman aktif.
@@ -115,7 +115,7 @@ berdasarkan penilaian dosen.
 | Tiga karakter dalam satu environment | Pooh, Piglet dan Tigger pada satu halaman rumah sederhana |
 | Translate | Pooh keluar; kedua penolong mendekat; posisi mengikuti titik pegangan saat menarik |
 | Rotate | Kepala menoleh, tangan meraih, badan condong, kaki mengatur pijakan |
-| Scaling | Tigger merendah sebelum menarik; Pooh sedikit menyempit saat lepas dari pintu |
+| Scaling | Piglet merendah saat menarik; Tigger merendah sebelum menarik; Pooh sedikit menyempit saat lepas dari pintu |
 | Arbitrary axis | Tigger sedikit miring pada sumbu ternormalisasi (1,1,0.5) saat menarik; jatuh juga memakai axis-angle |
 | Hierarchy | Semua anggota tubuh mengikuti root/body; titik tangan dihitung dari matriks dunia |
 | 3D curve dan quadric lain | Geometri karakter tetap: lengan Pooh/ekor Tigger, moncong Pooh dan telinga Piglet/Tigger |

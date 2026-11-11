@@ -97,6 +97,9 @@ export function createStory(){
     c.root.axis.set(.5,1,-.5).normalize();
     c.root.axisAngle=.10*pulse(t,21,24);
     c.root.position.set(mix(2.2,-.25,blend(t,14,19))+released*2.2,0,.05);
+    // Piglet merendah dan sedikit melebar saat mengerahkan tenaga menarik Pooh.
+    const pigletSquash=.18*pulling;
+    c.root.scale.set(sizes[i]*(1+pigletSquash*.35),sizes[i]*(1-pigletSquash),sizes[i]*(1+pigletSquash*.35));
     c.parts.head.rotation.y=.45*pulse(t,14,17);
     const grip=blend(t,19,21)*(1-blend(t,48.8,50));
     c.parts.arms.forEach((arm,j)=>arm.rotation.set(-1.7*grip,0,(j===0?.35:-.35)*grip));
